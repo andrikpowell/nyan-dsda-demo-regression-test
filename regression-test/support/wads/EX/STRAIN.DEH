@@ -1,0 +1,1361 @@
+Patch File for DeHackEd v3.0
+
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 19
+Patch format = 6
+
+
+Thing 6 (Holobot (Inv))
+Hit points = 200
+Pain chance = 128
+Pain sound = 0
+Close attack frame = 331
+Width = 2031616
+Mass = 300
+Bits = 4997638
+Respawn frame = 0
+
+Thing 7 (Revenant Fireball)
+Speed = 262144
+
+Thing 9 (Demon Lord)
+Hit points = 1400
+Pain chance = 50
+Pain sound = 26
+Width = 1572864
+Action sound = 29
+
+Thing 10 (Lord Fireball)
+Speed = 983040
+Missile damage = 5
+
+Thing 13 (Demon (Skinless))
+Hit points = 217
+
+Thing 14 (BFG Trooper)
+Initial frame = 174
+Hit points = 20
+First moving frame = 176
+Alert sound = 36
+Attack sound = 1
+Injury frame = 187
+Pain chance = 200
+Pain sound = 27
+Close attack frame = 336
+Far attack frame = 336
+Death frame = 189
+Exploding frame = 194
+Death sound = 59
+Speed = 8
+Width = 1310720
+Mass = 100
+Action sound = 75
+Bits = 4194310
+Respawn frame = 203
+
+Thing 19 (Doppleganger)
+Attack sound = 101
+Pain chance = 200
+Height = 3145728
+Missile damage = 2
+Bits = 4211206
+
+Thing 20 (Polydrone)
+Hit points = 160
+First moving frame = 602
+Injury frame = 611
+Pain chance = 128
+Pain sound = 0
+Far attack frame = 613
+Death frame = 617
+Death sound = 82
+Speed = 8
+Width = 1179648
+Height = 1966080
+Mass = 80
+Bits = 4735750
+
+Thing 21 (Imp (Class II))
+Hit points = 60
+Pain chance = 300
+Pain sound = 27
+Death sound = 62
+Speed = 10
+Width = 1310720
+Height = 3670016
+Mass = 100
+Action sound = 76
+
+Thing 22 (Cyberdemon Jr)
+Hit points = 300
+Pain chance = 40
+Speed = 9
+Width = 1310720
+Height = 3604480
+Mass = 300
+
+Thing 23 (Holobot)
+Initial frame = 321
+Hit points = 200
+First moving frame = 323
+Alert sound = 106
+Injury frame = 343
+Pain sound = 0
+Close attack frame = 331
+Far attack frame = 339
+Death frame = 345
+Death sound = 74
+Speed = 10
+Mass = 300
+Action sound = 105
+Bits = 4735494
+Respawn frame = 0
+
+Thing 24 (Decompress Daemon)
+Initial frame = 475
+Hit points = 8000
+First moving frame = 477
+Alert sound = 94
+Reaction time = 1
+Attack sound = 95
+Injury frame = 488
+Pain chance = 0
+Pain sound = 95
+Close attack frame = 335
+Far attack frame = 335
+Death frame = 490
+Exploding frame = 0
+Death sound = 95
+Speed = 30
+Width = 983040
+Missile damage = 500
+Action sound = 95
+Bits = 16906
+Respawn frame = 496
+
+Thing 35 (FFG Bullet)
+Speed = 2621440
+Width = 524288
+Missile damage = 12
+
+Thing 36 (Psy Blast Shot)
+Speed = 524288
+Width = 917504
+Missile damage = 200
+Bits = 329232
+
+Thing 37 (Arach. Fireball)
+Death frame = 330
+Death sound = 15
+Speed = 524288
+Missile damage = 100
+
+Sound 70
+Value = 110
+
+Frame 5
+Duration = 3
+
+Frame 7
+Duration = 4
+Next frame = 325
+
+Frame 8
+Sprite number = 35
+Sprite subnumber = 4
+Duration = 9
+Next frame = 0
+
+Frame 13
+Duration = 3
+
+Frame 14
+Duration = 5
+
+Frame 15
+Duration = 3
+
+Frame 22
+Duration = 4
+
+Frame 24
+Duration = 4
+
+Frame 25
+Duration = 5
+
+Frame 26
+Duration = 4
+
+Frame 27
+Duration = 3
+
+Frame 29
+Duration = 6
+
+Frame 30
+Duration = 3
+
+Frame 31
+Duration = 2
+
+Frame 78
+Duration = 40
+
+Frame 84
+Duration = 8
+
+Frame 85
+Duration = 8
+
+Frame 86
+Duration = 2
+
+Frame 87
+Duration = 2
+
+Frame 321
+Sprite number = 50
+Duration = 3
+Next frame = 321
+
+Frame 323
+Sprite number = 50
+Duration = 3
+
+Frame 324
+Sprite number = 50
+Sprite subnumber = 1
+Duration = 3
+Next frame = 326
+
+Frame 325
+Sprite number = 2
+Sprite subnumber = 4
+Duration = 9
+Next frame = 9
+
+Frame 326
+Sprite number = 50
+Sprite subnumber = 2
+Duration = 3
+
+Frame 327
+Sprite number = 50
+Sprite subnumber = 3
+Duration = 3
+
+Frame 328
+Sprite number = 50
+Sprite subnumber = 4
+Duration = 3
+
+Frame 329
+Sprite number = 50
+Sprite subnumber = 5
+Duration = 3
+Next frame = 323
+
+Frame 330
+Sprite number = 48
+Sprite subnumber = 32768
+Duration = 5
+Next frame = 669
+
+Frame 331
+Sprite number = 50
+Sprite subnumber = 0
+Duration = 20
+
+Frame 332
+Sprite number = 50
+Sprite subnumber = 6
+Next frame = 323
+
+Frame 334
+Sprite subnumber = 1
+Duration = 50
+Next frame = 0
+
+Frame 335
+Sprite number = 39
+Sprite subnumber = 0
+Duration = 1
+Next frame = 477
+
+Frame 336
+Sprite number = 29
+Sprite subnumber = 4
+Duration = 25
+
+Frame 337
+Sprite number = 29
+Sprite subnumber = 5
+Duration = 8
+
+Frame 338
+Sprite number = 29
+Sprite subnumber = 4
+Duration = 8
+Next frame = 176
+
+Frame 339
+Sprite number = 50
+Sprite subnumber = 0
+Duration = 5
+
+Frame 340
+Sprite number = 50
+Sprite subnumber = 0
+Duration = 5
+Next frame = 342
+
+Frame 341
+Sprite number = 50
+Sprite subnumber = 0
+Duration = 3
+Next frame = 344
+
+Frame 342
+Sprite number = 50
+Sprite subnumber = 32768
+Duration = 5
+
+Frame 343
+Sprite number = 50
+Sprite subnumber = 0
+Duration = 3
+Next frame = 341
+
+Frame 344
+Sprite number = 50
+Sprite subnumber = 0
+Duration = 6
+
+Frame 345
+Sprite number = 50
+Sprite subnumber = 32775
+Duration = 10
+
+Frame 346
+Sprite number = 50
+Sprite subnumber = 32776
+Duration = 10
+
+Frame 347
+Sprite number = 50
+Sprite subnumber = 32777
+Duration = 10
+
+Frame 348
+Sprite number = 50
+Sprite subnumber = 32778
+Duration = 10
+
+Frame 349
+Sprite number = 50
+Sprite subnumber = 32779
+Duration = 10
+
+Frame 350
+Sprite number = 50
+Sprite subnumber = 32780
+Duration = 10
+
+Frame 351
+Sprite number = 45
+Sprite subnumber = 9
+Duration = 4
+Next frame = 622
+
+Frame 352
+Sprite number = 50
+Sprite subnumber = 10
+Duration = 8
+
+Frame 353
+Sprite number = 50
+Sprite subnumber = 9
+Duration = 8
+
+Frame 354
+Sprite number = 50
+Sprite subnumber = 8
+Duration = 8
+
+Frame 355
+Sprite number = 50
+Sprite subnumber = 7
+Duration = 8
+
+Frame 356
+Sprite number = 50
+Sprite subnumber = 6
+Duration = 8
+
+Frame 357
+Sprite number = 41
+
+Frame 358
+Sprite number = 41
+
+Frame 359
+Sprite number = 41
+Sprite subnumber = 32770
+
+Frame 360
+Sprite number = 41
+Sprite subnumber = 32771
+
+Frame 361
+Sprite number = 41
+Sprite subnumber = 32772
+
+Frame 364
+Duration = 3
+
+Frame 365
+Duration = 3
+
+Frame 366
+Duration = 3
+
+Frame 367
+Duration = 3
+
+Frame 368
+Duration = 3
+
+Frame 369
+Duration = 3
+
+Frame 370
+Duration = 3
+
+Frame 371
+Duration = 3
+Next frame = 364
+
+Frame 372
+Duration = 3
+
+Frame 373
+Duration = 3
+
+Frame 374
+Duration = 3
+
+Frame 375
+Duration = 3
+
+Frame 376
+Sprite subnumber = 4
+Duration = 8
+
+Frame 377
+Sprite subnumber = 5
+Duration = 1
+
+Frame 378
+Sprite subnumber = 6
+Duration = 1
+
+Frame 379
+Duration = 1
+Next frame = 364
+
+Frame 380
+Duration = 2
+
+Frame 381
+Duration = 1
+
+Frame 382
+Duration = 1
+
+Frame 383
+Duration = 2
+
+Frame 386
+Sprite subnumber = 7
+Duration = 2
+
+Frame 387
+Sprite subnumber = 7
+Duration = 2
+
+Frame 388
+Sprite subnumber = 8
+Duration = 8
+
+Frame 389
+Sprite subnumber = 9
+Duration = 8
+
+Frame 390
+Sprite subnumber = 10
+Duration = 8
+
+Frame 391
+Sprite subnumber = 11
+Duration = 8
+
+Frame 392
+Sprite subnumber = 12
+Duration = 8
+
+Frame 393
+Sprite subnumber = 13
+Duration = 8
+
+Frame 394
+Sprite subnumber = 14
+Duration = -1
+Next frame = 0
+
+Frame 398
+Sprite subnumber = 14
+Duration = 8
+
+Frame 399
+Sprite subnumber = 13
+Duration = 8
+
+Frame 400
+Sprite subnumber = 12
+Duration = 8
+
+Frame 401
+Sprite subnumber = 11
+Duration = 8
+
+Frame 402
+Sprite subnumber = 10
+Duration = 8
+
+Frame 403
+Sprite subnumber = 9
+Duration = 8
+
+Frame 404
+Sprite subnumber = 8
+Duration = 8
+Next frame = 364
+
+Frame 590
+Duration = 10
+Next frame = 738
+
+Frame 601
+Next frame = 601
+
+Frame 602
+Sprite subnumber = 0
+Duration = 50
+Next frame = 603
+
+Frame 610
+Next frame = 603
+
+Frame 612
+Next frame = 603
+
+Frame 613
+Sprite subnumber = 4
+Duration = 20
+
+Frame 614
+Sprite subnumber = 32773
+Duration = 4
+Next frame = 615
+
+Frame 615
+Sprite subnumber = 32773
+Duration = 4
+
+Frame 616
+Sprite subnumber = 4
+Duration = 1
+Next frame = 614
+
+Frame 617
+Sprite subnumber = 32772
+Duration = 10
+
+Frame 618
+Duration = 10
+Next frame = 687
+
+Frame 619
+Sprite subnumber = 32776
+Duration = 10
+Next frame = 0
+
+Frame 620
+Sprite subnumber = 32777
+Duration = 4
+Next frame = 351
+
+Frame 621
+Sprite subnumber = 32778
+Duration = 4
+Next frame = 351
+
+Frame 622
+Sprite subnumber = 32779
+Duration = 4
+
+Frame 623
+Sprite subnumber = 32780
+Duration = 4
+
+Frame 624
+Sprite subnumber = 32781
+Duration = 4
+
+Frame 625
+Sprite subnumber = 32777
+Duration = 4
+
+Frame 626
+Sprite subnumber = 32778
+Duration = 4
+
+Frame 627
+Sprite subnumber = 32779
+Duration = 4
+
+Frame 628
+Sprite subnumber = 32780
+Duration = 3
+
+Frame 629
+Sprite subnumber = 32781
+Duration = 3
+Next frame = 621
+
+Frame 630
+Sprite number = 0
+Sprite subnumber = 0
+Next frame = 0
+
+Frame 631
+Sprite number = 0
+Sprite subnumber = 0
+
+Frame 632
+Sprite number = 0
+
+Frame 633
+Sprite number = 0
+
+Frame 634
+Sprite number = 0
+
+Frame 635
+Sprite number = 0
+Duration = 1
+
+Frame 636
+Sprite number = 0
+Duration = 1
+
+Frame 637
+Sprite number = 0
+Duration = 1
+
+Frame 638
+Sprite number = 0
+Duration = 1
+
+Frame 639
+Sprite number = 0
+Duration = 1
+
+Frame 640
+Sprite number = 0
+Duration = 1
+
+Frame 641
+Sprite number = 0
+Duration = 1
+Next frame = 646
+
+Frame 642
+Duration = 1
+
+Frame 643
+Duration = 1
+
+Frame 644
+Duration = 1
+
+Frame 645
+Duration = 1
+
+Frame 646
+Sprite number = 0
+Sprite subnumber = 3
+Duration = 1
+
+Frame 647
+Sprite number = 0
+Sprite subnumber = 4
+Duration = 30
+
+Frame 648
+Sprite number = 0
+Sprite subnumber = 5
+Duration = 5
+
+Frame 649
+Sprite number = 0
+Sprite subnumber = 6
+Duration = 23
+
+Frame 650
+Sprite number = 0
+Sprite subnumber = 6
+
+Frame 651
+Sprite number = 0
+Sprite subnumber = 7
+Duration = 4
+
+Frame 652
+Sprite number = 0
+Sprite subnumber = 7
+Duration = 4
+
+Frame 653
+Sprite number = 0
+Sprite subnumber = 8
+Duration = 8
+
+Frame 654
+Sprite number = 0
+Sprite subnumber = 9
+Duration = 8
+
+Frame 655
+Sprite number = 0
+Sprite subnumber = 10
+Duration = 6
+
+Frame 656
+Sprite number = 0
+Sprite subnumber = 11
+Duration = 6
+Next frame = 659
+
+Frame 659
+Sprite number = 0
+Sprite subnumber = 12
+
+Frame 660
+Sprite number = 0
+Sprite subnumber = 12
+Duration = 8
+
+Frame 661
+Sprite number = 0
+Sprite subnumber = 11
+Duration = 8
+
+Frame 662
+Sprite number = 0
+Sprite subnumber = 10
+Duration = 6
+
+Frame 663
+Sprite number = 0
+Sprite subnumber = 9
+Duration = 6
+Next frame = 666
+
+Frame 666
+Sprite number = 0
+Sprite subnumber = 8
+Duration = 6
+
+Frame 669
+Sprite subnumber = 32769
+
+Frame 670
+Sprite subnumber = 32770
+
+Frame 671
+Sprite subnumber = 32771
+
+Frame 672
+Sprite subnumber = 32772
+
+Frame 673
+Sprite subnumber = 32773
+
+Frame 684
+Duration = 15
+
+Frame 686
+Next frame = 676
+
+Frame 687
+Sprite number = 45
+Sprite subnumber = 32776
+Duration = 10
+Next frame = 621
+
+Frame 688
+Sprite number = 45
+Sprite subnumber = 32780
+Duration = 4
+Next frame = 624
+
+Frame 689
+Next frame = 0
+
+Frame 738
+Sprite number = 44
+Sprite subnumber = 32770
+
+Frame 739
+Sprite number = 44
+Sprite subnumber = 32771
+Duration = 20
+
+Frame 740
+Sprite number = 44
+Sprite subnumber = 32770
+
+Frame 741
+Sprite number = 44
+Sprite subnumber = 32771
+Next frame = 587
+
+Frame 742
+Sprite subnumber = 2
+Duration = 1
+
+Frame 743
+Sprite subnumber = 3
+
+Sprite 1
+Offset = 120
+
+Ammo 2 (Cells)
+Max ammo = 50
+Per ammo = 3
+
+Weapon 6 (BFG 9000)
+Ammo type = 3
+Firing frame = 0
+
+Pointer 70 (Frame 119)
+Codep Frame = 127
+
+Pointer 174 (Frame 325)
+Codep Frame = 6
+
+Pointer 179 (Frame 330)
+Codep Frame = 119
+
+Pointer 180 (Frame 331)
+Codep Frame = 184
+
+Pointer 181 (Frame 332)
+Codep Frame = 338
+
+Pointer 183 (Frame 334)
+Codep Frame = 17
+
+Pointer 184 (Frame 335)
+Codep Frame = 590
+
+Pointer 185 (Frame 336)
+Codep Frame = 376
+
+Pointer 187 (Frame 338)
+Codep Frame = 648
+
+Pointer 190 (Frame 341)
+Codep Frame = 157
+
+Pointer 191 (Frame 342)
+Codep Frame = 341
+
+Pointer 209 (Frame 376)
+Codep Frame = 184
+
+Pointer 211 (Frame 378)
+Codep Frame = 380
+
+Pointer 212 (Frame 379)
+Codep Frame = 383
+
+Pointer 322 (Frame 590)
+Codep Frame = 184
+
+Pointer 327 (Frame 602)
+Codep Frame = 176
+
+Pointer 332 (Frame 607)
+Codep Frame = 176
+
+Pointer 336 (Frame 611)
+Codep Frame = 176
+
+Pointer 337 (Frame 612)
+Codep Frame = 157
+
+Pointer 338 (Frame 613)
+Codep Frame = 184
+
+Pointer 339 (Frame 614)
+Codep Frame = 417
+
+Pointer 340 (Frame 615)
+Codep Frame = 417
+
+Pointer 341 (Frame 616)
+Codep Frame = 419
+
+Pointer 342 (Frame 617)
+Codep Frame = 190
+
+Pointer 343 (Frame 618)
+Codep Frame = 127
+
+Pointer 344 (Frame 620)
+Codep Frame = 176
+
+Pointer 345 (Frame 621)
+Codep Frame = 160
+
+Pointer 346 (Frame 622)
+Codep Frame = 487
+
+Pointer 350 (Frame 635)
+Codep Frame = 176
+
+Pointer 356 (Frame 641)
+Codep Frame = 176
+
+Pointer 363 (Frame 648)
+Codep Frame = 454
+
+Pointer 377 (Frame 682)
+Codep Frame = 676
+
+Pointer 382 (Frame 687)
+Codep Frame = 160
+
+Pointer 383 (Frame 688)
+Codep Frame = 487
+
+Pointer 415 (Frame 738)
+Codep Frame = 454
+
+Pointer 417 (Frame 740)
+Codep Frame = 590
+
+Misc 0
+Initial Bullets = 0
+Blue Armor Class = 3
+BFG Cells/Shot = 3
+
+Text 59 59
+CyberMan: Wrong mouse driver - no SWIFT support (AX=%04x).
+CyberMan: you don't have one, so of course it doesn't work.
+
+Text 405 404
+YOU HAVE ENTERED DEEPLY INTO THE INFESTED
+STARPORT. BUT SOMETHING IS WRONG. THE
+MONSTERS HAVE BROUGHT THEIR OWN REALITY
+WITH THEM, AND THE STARPORT'S TECHNOLOGY
+IS BEING SUBVERTED BY THEIR PRESENCE.
+
+AHEAD, YOU SEE AN OUTPOST OF HELL, A
+FORTIFIED ZONE. IF YOU CAN GET PAST IT,
+YOU CAN PENETRATE INTO THE HAUNTED HEART
+OF THE STARBASE AND FIND THE CONTROLLING
+SWITCH WHICH HOLDS EARTH'S POPULATION
+HOSTAGE.AGAIN, EARTH IS SECURED! YOU HAVE
+SUCCESSFULLY SLAUGHTERED YOUR WAY
+TO THE LUNAR SHIPPING STATION.
+THERE IS A CARGO LINER PREPPED ON
+THE LAUNCH PAD STILL SPILLING OUT
+THE DEVIL'S CHILDREN IT BROUGHT ON
+IT'S LAST JOURNEY. YOU CLIMB ABOARD
+SMEARING THE DIRTY STEEL WITH THE
+BLUE-RED BLOOD FROM YOUR BOOTS.
+THE BLACK DRUGS ARE REACHING FULL
+EFFECT NOW.
+
+NEXT STOP:
+THE MOON. DARK SIDE. STATION DARO.        
+
+Text 617 619
+YOU HAVE WON! YOUR VICTORY HAS ENABLED
+HUMANKIND TO EVACUATE EARTH AND ESCAPE
+THE NIGHTMARE.  NOW YOU ARE THE ONLY
+HUMAN LEFT ON THE FACE OF THE PLANET.
+CANNIBAL MUTATIONS, CARNIVOROUS ALIENS,
+AND EVIL SPIRITS ARE YOUR ONLY NEIGHBORS.
+YOU SIT BACK AND WAIT FOR DEATH, CONTENT
+THAT YOU HAVE SAVED YOUR SPECIES.
+
+BUT THEN, EARTH CONTROL BEAMS DOWN A
+MESSAGE FROM SPACE: "SENSORS HAVE LOCATED
+THE SOURCE OF THE ALIEN INVASION. IF YOU
+GO THERE, YOU MAY BE ABLE TO BLOCK THEIR
+ENTRY.  THE ALIEN BASE IS IN THE HEART OF
+YOUR OWN HOME CITY, NOT FAR FROM THE
+STARPORT." SLOWLY AND PAINFULLY YOU GET
+UP AND RETURN TO THE FRAY.THE NEW MUTATIONS OF EVIL ARE NASTIER
+THAN ANY GHOUL EVER DREAMED UP BY THE
+MOST OPIUM-STARVED OF POETS.
+EVEN SO, HOW IN THE HELL DID THESE
+LITTLE BUGGERS SPREAD SO FAR SO FAST?
+A SIXTH SENSE TELLS YOU TO SURPRESS
+YOUR CURIOSITY. COMMAND CONTROL HAS
+BEEN CLEARED, AND THE POWER STATION
+AWAITS. YOU BLAST ONE LAST DOPPLEGANGER.
+WITH YOUR ACHING FINGERS, YOU STUFF A
+DOZEN MORE SHELLS IN THE SHOTGUN BEFORE
+HIS LIFELESS BODY HITS THE FLOOR. YOUR
+TRANSFORMATION IS COMPLETE. THE PIT
+OF SIN BETTER HAVE STRONGER WARRIORS
+AHEAD THAN THESE.     YOU KNOW IT WILL.                  
+                                            
+
+Text 312 315
+YOU ARE AT THE CORRUPT HEART OF THE CITY,
+SURROUNDED BY THE CORPSES OF YOUR ENEMIES.
+YOU SEE NO WAY TO DESTROY THE CREATURES'
+ENTRYWAY ON THIS SIDE, SO YOU CLENCH YOUR
+TEETH AND PLUNGE THROUGH IT.
+
+THERE MUST BE A WAY TO CLOSE IT ON THE
+OTHER SIDE. WHAT DO YOU CARE IF YOU'VE
+GOT TO GO THROUGH HELL TO GET TO IT?A FLASH OF REALIZATION: YOU WERE
+WITNESS TO THE DESTRUCTION OF THE
+"VERY LAST OF THE DEMONS ON EARTH"...
+
+ON EARTH! NOW WOULD THE GOVERNMENT,
+THE CAUSE OF ALL YOUR TROUBLES, STORE
+THESE CREATURES ON THE MOON AND
+EXPERIMENT ON THEM, INCOMPETENTLY
+CREATING A NEW STRAIN?
+
+YOU'LL HANDLE THOSE IN CHARGE... YOUR WAY.   
+
+Text 494 495
+THE HORRENDOUS VISAGE OF THE BIGGEST
+DEMON YOU'VE EVER SEEN CRUMBLES BEFORE
+YOU, AFTER YOU PUMP YOUR ROCKETS INTO
+HIS EXPOSED BRAIN. THE MONSTER SHRIVELS
+UP AND DIES, ITS THRASHING LIMBS
+DEVASTATING UNTOLD MILES OF HELL'S
+SURFACE.
+
+YOU'VE DONE IT. THE INVASION IS OVER.
+EARTH IS SAVED. HELL IS A WRECK. YOU
+WONDER WHERE BAD FOLKS WILL GO WHEN THEY
+DIE, NOW. WIPING THE SWEAT FROM YOUR
+FOREHEAD YOU BEGIN THE LONG TREK BACK
+HOME. REBUILDING EARTH OUGHT TO BE A
+LOT MORE FUN THAN RUINING IT WAS.
+YOU'VE DESTROYED EVERY LAST DENIZEN OF
+DOOM. PERIOD.  YOU ALSO DESTROYED THE
+GENERAL IN CHARGE OF THE SPACE STATION,
+WHO HAPPENED TO HAVE A SEVERED, BOBBING
+HEAD. WEIRD.
+IT'S OVER. THIS SHOULD IMPRESS BABES.
+THEN AGAIN, YOU ARE A BLOATED, PSYCHIC,
+FREAKY MADMAN NOW. PERHAPS YOU CAN
+START A GAME COMPANY AND WRITE 3D ENGINES
+WITH YOUR ALTERED BRAIN.  THAT SHOULD
+CAUSE THE COMPETITION TO SPUTTER AND
+JERK AND BLATHER OUT UNREAL-ISTIC CLAIMS.
+
+THANKS FOR PLAYING!
+  -- THE ALPHA DOG ALLIANCE     
+
+Text 164 167
+CONGRATULATIONS, YOU'VE FOUND THE SECRET
+LEVEL! LOOKS LIKE IT'S BEEN BUILT BY
+HUMANS, RATHER THAN DEMONS. YOU WONDER
+WHO THE INMATES OF THIS CORNER OF HELL
+WILL BE.WAIT A MINUTE... THAT SWITCH WASN'T IN THE
+FLOORPLAN. AND WHAT KIND OF PLACE IS THIS?
+LOOKS LIKE DARO HAS GOTTEN SOME UNEXPECTED
+RENOVATIONS. THIS IS NOT A GOOD SIGN.
+
+
+Text 92 95
+CONGRATULATIONS, YOU'VE FOUND THE
+SUPER SECRET LEVEL!  YOU'D BETTER
+BLAZE THROUGH THIS ONE!
+AND NOW FOR SOMETHING COMPLETELY
+DIFFERENT...               
+                                  
+
+Text 17 19
+HEAVY WEAPON DUDESUBVERTED GUARD    
+
+Text 9 11
+LOST SOULDOPPLEGANGR
+
+Text 11 11
+ARACHNOTRONCLASS 2 IMP
+
+Text 14 13
+PAIN ELEMENTAL   HOLOBOT   
+
+Text 8 11
+REVENANTINV HOLOBOT
+
+Text 8 11
+MANCUBUSDEMON LORD 
+
+Text 21 21
+THE SPIDER MASTERMIND     POLYDRONE       
+
+Text 14 15
+THE CYBERDEMONMINISTER O HATE
+
+Text 415 415
+===========================================================================
+ATTENTION:  This version of DOOM has been modified.  If you would like to
+get a copy of the original game, call 1-800-IDGAMES or see the readme file.
+        You will not receive technical support for modified games.
+                      press enter to continue
+===========================================================================
+========================================================================
+ATTENTION: This version of Doom 2 has been very heavily modified...
+                           Welcome to STRAIN!
+   This better be a registered copy of Doom 2!
+   Send comments/bugs to The Alpha Dog Alliance
+======================== press <enter> to continue =====================
+                                                            
+
+Text 21 21
+	registered version.
+     Strain, v1.0.  
+
+
+Text 21 23
+	commercial version.
+     Strain, v1.0.    
+
+
+Text 25 27
+Picked up an energy cell.Picked up a mini-battery.  
+
+Text 30 31
+Picked up an energy cell pack.Picked up a battery.           
+
+Text 30 28
+You got the BFG9000!  Oh, yes.You got the Psychic Blaster!
+
+Text 23 21
+You got the plasma gun!You got the NFG!!    
+
+Text 20 23
+You got the shotgun!You got the sawed-off! 
+
+Text 22 20
+Degreelessness Mode Onwimp mode <on>      
+
+Text 23 20
+Degreelessness Mode Offwimp mode <off>     
+
+Text 20 20
+Ammo (no keys) Addedcan't-aim mode <on> 
+
+Text 21 20
+Very Happy Ammo Addedclueless mode <on>  
+
+Text 12 12
+Music Changegood choice 
+
+Text 19 18
+No Clipping Mode ONclipping mode <on>
+
+Text 20 20
+No Clipping Mode OFFclipping mode <off> 
+
+Text 16 18
+Power-up Toggledcan't hack it, eh?
+
+Text 17 16
+level 1: entryway1: Barracks     
+
+Text 19 16
+level 2: underhalls2: Outskirts    
+
+Text 20 20
+level 3: the gantlet3: Downtown         
+
+Text 18 18
+level 4: the focus4: Industrial Zone
+
+Text 26 24
+level 5: the waste tunnels5: Depot                
+
+Text 20 20
+level 6: the crusher6: Launch Control   
+
+Text 20 20
+level 7: dead simple7: En Route         
+
+Text 25 24
+level 8: tricks and traps8: Hangar               
+
+Text 16 16
+level 9: the pit9: Cargo Bay    
+
+Text 24 24
+level 10: refueling base10: Entryway            
+
+Text 29 28
+level 11: 'o' of destruction!11: Command Control         
+
+Text 21 20
+level 12: the factory12: Power Station   
+
+Text 18 16
+level 13: downtown13: Ruins       
+
+Text 25 24
+level 14: the inmost dens14: Engineering         
+
+Text 25 24
+level 15: industrial zone15: Subsidiary Power    
+
+Text 17 19
+level 16: suburbs16: Living Quarters
+
+Text 19 16
+level 17: tenements17: Promenade   
+
+Text 23 20
+level 18: the courtyard18: Relay Station   
+
+Text 21 20
+level 19: the citadel19: Waste Processing
+
+Text 17 16
+level 20: gotcha!20: Reactor     
+
+Text 17 16
+level 21: nirvana21: Maintenance 
+
+Text 23 20
+level 22: the catacombs22: Specimen Storage
+
+Text 24 24
+level 23: barrels o' fun23: Dispensary Alpha    
+
+Text 19 18
+level 24: the chasm24: Sub-Laboratory
+
+Text 20 20
+level 25: bloodfalls25: Main Laboratory 
+
+Text 29 28
+level 26: the abandoned mines26: Main Laboratory II      
+
+Text 23 20
+level 27: monster condo27: Dispensary Beta 
+
+Text 26 24
+level 28: the spirit world28: Unknown             
+
+Text 24 24
+level 29: the living end29: Self-Destruct       
+
+Text 21 20
+level 30: icon of sin30: Boss            
+
+Text 21 20
+level 31: wolfenstein31: Secret Level    
+
+Text 16 16
+level 32: grosse32: Secret Level
+
+Text 4 4
+SHTGSG3G
+
+Text 4 4
+PUNGPUN2
+
+Text 4 4
+SHTFSG3F
+
+Text 4 4
+PLSGFFGG
+
+Text 4 4
+PLSFFFGF
+
+Text 4 4
+BFGGPSYB
+
+Text 4 4
+PLSSFFGS
+
+Text 4 4
+PLSEFFGE
+
+Text 4 4
+PLAYPLA2
+
+Text 4 4
+FATTBOS3
+
+Text 4 4
+CPOSGPOS
+
+Text 4 4
+SARGSAR2
+
+Text 4 4
+SKULSKU2
+
+Text 4 4
+SPIDPOLY
+
+Text 4 4
+APLSBFG2
+
+Text 4 4
+APBXBF2X
+
+Text 4 4
+CYBRCYBJ
+
+Text 4 4
+PAINFBOT
+
+Text 4 4
+ARM2ARM3
+
+Text 4 4
+CELLBATT
+
+Text 4 4
+CELPBATP
+
+Text 4 4
+BFUGPSYG
+
+Text 4 4
+PLASFFGL
+
+Text 4 4
+SHOTSGN3
+
+Text 4 4
+POL3CMAS

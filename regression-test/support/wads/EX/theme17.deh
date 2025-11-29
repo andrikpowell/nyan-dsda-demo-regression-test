@@ -1,0 +1,2200 @@
+Patch File for DeHackEd v3.0
+
+# Note: Use the pound sign ('#') to start comment lines.
+
+Doom version = 21
+Patch format = 6
+
+
+Thing 2 (Alien Egg)
+ID # = 36
+Initial frame = 547
+Hit points = 10
+First moving frame = 547
+Alert sound = 0
+Attack sound = 0
+Injury frame = 0
+Pain chance = 0
+Pain sound = 0
+Close attack frame = 547
+Far attack frame = 0
+Death frame = 574
+Exploding frame = 227
+Death sound = 31
+Speed = 0
+Height = 2359296
+Mass = 10000000
+Action sound = 0
+Respawn frame = 0
+
+Thing 3 (Predator 1)
+ID # = 58
+Initial frame = 527
+Hit points = 200
+First moving frame = 529
+Alert sound = 42
+Attack sound = 53
+Injury frame = 540
+Pain chance = 100
+Pain sound = 0
+Close attack frame = 537
+Far attack frame = 537
+Death frame = 510
+Exploding frame = 510
+Death sound = 74
+Mass = 200
+Action sound = 40
+Bits = 4456454
+Respawn frame = 0
+
+Thing 4 (Twitching Body)
+ID # = 26
+Initial frame = 900
+Hit points = 20
+First moving frame = 900
+Alert sound = 0
+Injury frame = 0
+Pain chance = 0
+Pain sound = 0
+Close attack frame = 900
+Far attack frame = 0
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Speed = 0
+Width = 1048576
+Height = 1048576
+Mass = 10000000
+Action sound = 0
+Bits = 6
+
+Thing 6 (Plasmagun Clone)
+ID # = 16
+Initial frame = 174
+Hit points = 70
+First moving frame = 176
+Alert sound = 38
+Injury frame = 187
+Pain chance = 200
+Close attack frame = 0
+Far attack frame = 647
+Death frame = 189
+Exploding frame = 194
+Death sound = 59
+Speed = 8
+Mass = 100
+Action sound = 75
+Respawn frame = 0
+
+Thing 7 (Predator Disc)
+Alert sound = 63
+Death frame = 99
+Death sound = 107
+Speed = 327680
+Missile damage = 15
+
+Thing 8 (Disc Trail)
+Initial frame = 343
+Pain sound = 105
+
+Thing 9 (SS Nazi)
+ID # = 84
+Initial frame = 726
+Hit points = 50
+First moving frame = 728
+Alert sound = 101
+Injury frame = 742
+Pain chance = 170
+Pain sound = 27
+Far attack frame = 736
+Death frame = 744
+Exploding frame = 749
+Death sound = 102
+Width = 1310720
+Height = 3670016
+Mass = 100
+Respawn frame = 0
+
+Thing 10 (Pulse Bullet)
+Initial frame = 667
+Alert sound = 79
+Death frame = 93
+Death sound = 0
+Speed = 6553600
+Width = 851968
+Missile damage = 3
+
+Thing 11 (T1000 1)
+ID # = 3003
+Initial frame = 601
+Hit points = 1000
+First moving frame = 704
+Alert sound = 76
+Attack sound = 45
+Injury frame = 619
+Pain chance = 10
+Pain sound = 66
+Close attack frame = 263
+Far attack frame = 184
+Death frame = 592
+Exploding frame = 592
+Death sound = 73
+Speed = 10
+Mass = 300
+Action sound = 76
+Bits = 4718598
+Respawn frame = 0
+
+Thing 12 (T40 1)
+Hit points = 100
+Alert sound = 43
+Pain sound = 0
+Close attack frame = 0
+Exploding frame = 457
+Death sound = 67
+Mass = 200
+Respawn frame = 0
+
+Thing 13 (T800 1)
+ID # = 3005
+Initial frame = 207
+Hit points = 1000
+First moving frame = 209
+Alert sound = 33
+Attack sound = 0
+Injury frame = 221
+Pain chance = 10
+Pain sound = 67
+Close attack frame = 0
+Far attack frame = 217
+Death frame = 220
+Exploding frame = 220
+Death sound = 51
+Speed = 8
+Width = 1310720
+Mass = 200
+Action sound = 76
+Respawn frame = 0
+
+Thing 14 (Alien Queen 1)
+ID # = 69
+Initial frame = 674
+First moving frame = 562
+Alert sound = 106
+Injury frame = 690
+Pain chance = 100
+Pain sound = 30
+Close attack frame = 335
+Death frame = 691
+Exploding frame = 462
+Width = 1310720
+Mass = 200
+Action sound = 39
+Bits = 4194310
+Respawn frame = 0
+
+Thing 15 (Facehugger 1)
+ID # = 66
+Initial frame = 556
+Hit points = 20
+First moving frame = 558
+Alert sound = 31
+Attack sound = 47
+Injury frame = 0
+Pain chance = 0
+Pain sound = 31
+Close attack frame = 507
+Far attack frame = 0
+Death frame = 692
+Exploding frame = 692
+Death sound = 68
+Speed = 20
+Width = 1310720
+Height = 1048576
+Mass = 10
+Action sound = 44
+Bits = 6
+Respawn frame = 0
+
+Thing 16 (Alien Queen 2)
+ID # = 3002
+Initial frame = 674
+Hit points = 150
+First moving frame = 562
+Alert sound = 106
+Attack sound = 52
+Injury frame = 690
+Pain chance = 100
+Pain sound = 30
+Close attack frame = 335
+Far attack frame = 0
+Death frame = 691
+Exploding frame = 462
+Death sound = 64
+Speed = 10
+Width = 1310720
+Height = 3670016
+Mass = 200
+Action sound = 39
+Respawn frame = 0
+
+Thing 17 (Predator Blast)
+Alert sound = 62
+Death sound = 82
+
+Thing 18 (Alien 1)
+ID # = 9
+Initial frame = 475
+Hit points = 60
+First moving frame = 477
+Alert sound = 41
+Attack sound = 52
+Injury frame = 488
+Pain chance = 200
+Pain sound = 30
+Close attack frame = 485
+Far attack frame = 0
+Death frame = 504
+Exploding frame = 462
+Death sound = 64
+Speed = 10
+Width = 1310720
+Height = 3670016
+Mass = 100
+Action sound = 39
+Respawn frame = 0
+
+Thing 19 (Red Hostage Key)
+ID # = 23
+Initial frame = 830
+Hit points = 1000
+First moving frame = 569
+Alert sound = 47
+Attack sound = 55
+Injury frame = 0
+Pain chance = 0
+Pain sound = 55
+Close attack frame = 569
+Far attack frame = 0
+Death frame = 348
+Exploding frame = 348
+Death sound = 72
+Speed = 0
+Width = 1310720
+Height = 1048576
+Mass = 100
+Missile damage = 0
+Action sound = 55
+Bits = 234881025
+
+Thing 20 (Big Boss Romero)
+ID # = 88
+Initial frame = 778
+Hit points = 250
+First moving frame = 778
+Alert sound = 0
+Attack sound = 0
+Injury frame = 779
+Pain chance = 255
+Pain sound = 97
+Close attack frame = 778
+Far attack frame = 0
+Death frame = 780
+Death sound = 98
+Speed = 0
+Width = 1048576
+Height = 1048576
+Mass = 10000000
+Action sound = 0
+Bits = 6
+
+Thing 21 (Rifle Clone)
+ID # = 3004
+Initial frame = 174
+Hit points = 30
+First moving frame = 176
+Alert sound = 36
+Injury frame = 187
+Pain chance = 200
+Pain sound = 27
+Far attack frame = 739
+Death frame = 189
+Exploding frame = 194
+Death sound = 59
+Speed = 8
+Width = 1310720
+Height = 3670016
+Mass = 100
+Action sound = 75
+Respawn frame = 0
+
+Thing 22 (Kommander Keen)
+ID # = 72
+Initial frame = 763
+Hit points = 100
+First moving frame = 763
+Alert sound = 0
+Injury frame = 776
+Pain chance = 256
+Pain sound = 103
+Close attack frame = 763
+Far attack frame = 0
+Death frame = 764
+Death sound = 104
+Speed = 0
+Width = 1048576
+Height = 4718592
+Mass = 10000000
+Action sound = 0
+Bits = 4195078
+
+Thing 23 (Chaingun Clone)
+ID # = 7
+Initial frame = 174
+Hit points = 50
+First moving frame = 176
+Alert sound = 37
+Injury frame = 187
+Pain chance = 200
+Pain sound = 27
+Far attack frame = 416
+Death frame = 189
+Exploding frame = 194
+Death sound = 59
+Width = 1310720
+Mass = 100
+Action sound = 75
+Bits = 4194310
+Respawn frame = 0
+
+Thing 24 (Hugger Tube)
+ID # = 37
+Initial frame = 569
+Hit points = 30
+First moving frame = 569
+Alert sound = 47
+Injury frame = 0
+Pain chance = 0
+Pain sound = 47
+Close attack frame = 569
+Far attack frame = 0
+Death frame = 348
+Exploding frame = 348
+Death sound = 72
+Speed = 0
+Width = 1048576
+Height = 4456448
+Action sound = 0
+Bits = 4718598
+Respawn frame = 0
+
+Thing 25 (Alien 2)
+ID # = 65
+Initial frame = 475
+Hit points = 60
+First moving frame = 477
+Alert sound = 41
+Attack sound = 52
+Injury frame = 488
+Pain chance = 200
+Pain sound = 30
+Close attack frame = 485
+Death frame = 504
+Exploding frame = 462
+Death sound = 64
+Speed = 10
+Width = 1310720
+Height = 3670016
+Mass = 100
+Action sound = 39
+Bits = 4194310
+
+Thing 26 (T40 2)
+ID # = 68
+Initial frame = 442
+Hit points = 100
+First moving frame = 444
+Alert sound = 43
+Injury frame = 455
+Pain chance = 200
+Pain sound = 0
+Far attack frame = 452
+Death frame = 457
+Exploding frame = 457
+Death sound = 67
+Speed = 8
+Width = 1310720
+Height = 3670016
+Mass = 200
+Action sound = 76
+Bits = 4194310
+
+Thing 32 (Plasma Bullet)
+Initial frame = 107
+Alert sound = 8
+Death frame = 524
+Speed = 1638400
+Missile damage = 5
+
+Thing 33 (Alien Acid)
+Initial frame = 104
+Alert sound = 64
+Death frame = 0
+Death sound = 0
+Speed = 327680
+Missile damage = 3
+
+Thing 34 (Plasma Bullet)
+Initial frame = 107
+Alert sound = 8
+Death frame = 524
+Death sound = 17
+Speed = 1638400
+Width = 851968
+Missile damage = 5
+
+Thing 35 (Fire Stream)
+Initial frame = 109
+Alert sound = 14
+Death frame = 111
+Death sound = 0
+Speed = 1310720
+Missile damage = 3
+
+Thing 36 (Rocket (in air))
+Initial frame = 114
+Speed = 1310720
+Width = 720896
+Missile damage = 20
+
+Thing 37 (Plasma Bullet)
+Initial frame = 107
+Death frame = 524
+Width = 393216
+
+Thing 46 (Civilian Adviser)
+Initial frame = 406
+Hit points = 50
+First moving frame = 408
+Alert sound = 54
+Injury frame = 420
+Pain chance = 256
+Death frame = 158
+Exploding frame = 165
+Death sound = 57
+Speed = -8
+Width = 1048576
+Height = 3670016
+Action sound = 16
+Bits = 67108870
+
+Thing 47 (Civilian Android)
+Initial frame = 406
+Hit points = 70
+First moving frame = 408
+Alert sound = 77
+Injury frame = 420
+Pain chance = 256
+Death frame = 158
+Exploding frame = 165
+Death sound = 57
+Speed = -10
+Width = 1048576
+Height = 3670016
+Action sound = 26
+Bits = 134217734
+
+Thing 49 (Rocket)
+ID # = 2010
+Initial frame = 872
+Bits = 1
+
+Thing 51 (Yellow Databoard)
+Initial frame = 832
+
+Thing 52 (Energy Cell)
+ID # = 2047
+Initial frame = 874
+Bits = 1
+
+Thing 53 (Blue Keycard)
+Initial frame = 828
+
+Thing 57 (T800 Bodyguard)
+Initial frame = 207
+First moving frame = 209
+Alert sound = 48
+Injury frame = 615
+Pain chance = 256
+Death frame = 220
+Exploding frame = 220
+Death sound = 71
+Speed = 8
+Height = 3670016
+Mass = 200
+Action sound = 80
+Bits = 6
+
+Thing 58 (Pulserifle Marine)
+Initial frame = 321
+Hit points = 200
+First moving frame = 323
+Alert sound = 46
+Injury frame = 573
+Pain chance = 256
+Death frame = 158
+Exploding frame = 165
+Death sound = 57
+Speed = 8
+Width = 1048576
+Height = 3670016
+Action sound = 78
+Bits = 6
+
+Thing 64 (Facehugger 2)
+ID # = 3006
+Initial frame = 556
+Hit points = 20
+First moving frame = 558
+Alert sound = 31
+Attack sound = 47
+Pain sound = 31
+Close attack frame = 507
+Death frame = 692
+Exploding frame = 692
+Death sound = 68
+Speed = 20
+Mass = 10
+Action sound = 44
+Bits = 6
+
+Thing 66 (Red Hostage)
+ID # = 13
+Initial frame = 585
+Hit points = 30
+First moving frame = 587
+Alert sound = 50
+Injury frame = 593
+Pain chance = 255
+Pain sound = 25
+Close attack frame = 708
+Death frame = 158
+Exploding frame = 165
+Death sound = 57
+Speed = 8
+Width = 1048576
+Height = 3670016
+Action sound = 76
+Bits = 234881030
+
+Thing 68 (Red Hostage)
+ID # = 38
+Initial frame = 585
+Hit points = 30
+First moving frame = 587
+Alert sound = 50
+Injury frame = 593
+Pain chance = 255
+Pain sound = 25
+Close attack frame = 708
+Death frame = 158
+Exploding frame = 165
+Death sound = 57
+Speed = 8
+Width = 1048576
+Height = 3670016
+Action sound = 76
+Bits = 234881030
+
+Thing 73 (Rocketlauncher)
+ID # = 2003
+Initial frame = 882
+
+Thing 74 (T1000 2)
+ID # = 64
+Initial frame = 519
+First moving frame = 519
+Attack sound = 45
+Injury frame = 619
+Pain chance = 5
+Pain sound = 66
+Close attack frame = 263
+Death frame = 621
+Exploding frame = 621
+Death sound = 69
+Speed = 10
+Height = 3670016
+Mass = 300
+Action sound = 76
+Bits = 524294
+
+Thing 76 (Flamethrower)
+ID # = 2006
+Initial frame = 879
+
+Thing 78 (Predator 2)
+ID # = 67
+Initial frame = 527
+Hit points = 200
+First moving frame = 529
+Attack sound = 53
+Injury frame = 540
+Pain chance = 100
+Close attack frame = 537
+Far attack frame = 339
+Death frame = 542
+Exploding frame = 542
+Death sound = 65
+Speed = 8
+Height = 3670016
+Mass = 200
+Action sound = 40
+Bits = 6
+
+Thing 80 (Tall Lamp)
+Hit points = 5
+Death frame = 918
+Death sound = 22
+Mass = 10000000
+Bits = 524294
+
+Thing 81 (Tall Lamp 2)
+Hit points = 5
+Death frame = 919
+Death sound = 22
+Mass = 10000000
+Bits = 524294
+
+Thing 82 (Short Lamp)
+Hit points = 5
+Death frame = 920
+Death sound = 22
+Mass = 10000000
+Bits = 524294
+
+Thing 84 (Shotgun Marine)
+Initial frame = 321
+Hit points = 100
+First moving frame = 323
+Alert sound = 70
+Injury frame = 331
+Pain chance = 256
+Death frame = 158
+Exploding frame = 165
+Death sound = 57
+Speed = 8
+Height = 3670016
+Action sound = 29
+Bits = 6
+
+Thing 86 (Plasmagun Marine)
+Initial frame = 321
+Hit points = 100
+First moving frame = 323
+Alert sound = 100
+Injury frame = 571
+Pain chance = 256
+Death frame = 158
+Exploding frame = 165
+Death sound = 57
+Speed = 8
+Height = 3670016
+Action sound = 49
+Bits = 6
+
+Thing 87 (Shotgun)
+ID # = 2001
+Initial frame = 884
+Width = 1310720
+Bits = 1
+
+Thing 88 (Chaingun)
+ID # = 2002
+Initial frame = 880
+Width = 1310720
+Bits = 1
+
+Thing 89 (Terminator Arm)
+Initial frame = 894
+Bits = 0
+
+Thing 90 (Predator Trophies)
+Initial frame = 896
+
+Thing 98 (Brown Stub)
+Initial frame = 908
+First moving frame = 603
+
+Thing 99 (Technical Column)
+Initial frame = 910
+First moving frame = 676
+
+Thing 102 (Swaying Body)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 103 (Hanging Arms Out)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 104 (One-legged Body)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 105 (Hanging Torso)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 106 (Hanging Leg)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 772
+
+Thing 107 (Hanging Arms Out2)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Width = 1048576
+Mass = 10000000
+Bits = 774
+
+Thing 108 (Hanging Torso 2)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Width = 1048576
+Mass = 10000000
+Bits = 774
+
+Thing 109 (One-legged Body 2)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Height = 5505024
+Mass = 10000000
+Bits = 772
+
+Thing 110 (Hanging Leg 2)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Width = 1048576
+Mass = 10000000
+Bits = 772
+
+Thing 111 (Swaying Body 2)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Width = 1048576
+Mass = 10000000
+Bits = 774
+
+Thing 112 (Dead T800)
+Initial frame = 226
+
+Thing 115 (Dead Predator)
+Initial frame = 546
+
+Thing 116 (Ammo Clip)
+ID # = 2007
+Initial frame = 870
+Bits = 1
+
+Thing 118 (Dead Alien)
+Initial frame = 495
+
+Thing 120 (Guts and Bones 2)
+Initial frame = 202
+
+Thing 121 (Dead Facehugger)
+Initial frame = 591
+Bits = 0
+
+Thing 123 (Open Alien Egg)
+Initial frame = 548
+Bits = 0
+
+Thing 125 (Impaled Body)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 6
+
+Thing 126 (T800 2)
+ID # = 71
+Initial frame = 207
+First moving frame = 209
+Alert sound = 33
+Injury frame = 220
+Pain chance = 10
+Pain sound = 67
+Far attack frame = 217
+Death frame = 221
+Exploding frame = 221
+Death sound = 67
+Speed = 8
+Width = 1310720
+Height = 3670016
+Mass = 200
+Action sound = 76
+Bits = 4194310
+
+Thing 129 (Hanging Body 1)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 130 (Hanging Body 2)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 131 (Hanging Body 3)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 132 (Hanging Body 4)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 133 (Hanging Body 5)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Thing 134 (Hanging Body 6)
+Hit points = 20
+Death frame = 195
+Exploding frame = 195
+Death sound = 31
+Mass = 10000000
+Bits = 774
+
+Frame 14
+Sprite subnumber = 32769
+
+Frame 22
+Sprite subnumber = 32768
+
+Frame 36
+Sprite subnumber = 32768
+
+Frame 52
+Sprite subnumber = 32768
+
+Frame 53
+Sprite subnumber = 32769
+
+Frame 60
+Sprite subnumber = 32769
+Next frame = 84
+
+Frame 61
+Sprite number = 13
+Sprite subnumber = 32769
+Duration = 3
+Next frame = 78
+
+Frame 62
+Sprite number = 15
+Sprite subnumber = 32769
+Duration = 1
+Next frame = 81
+
+Frame 77
+Sprite number = 15
+Sprite subnumber = 32768
+Duration = 1
+Next frame = 62
+
+Frame 79
+Sprite number = 15
+
+Frame 80
+Sprite number = 15
+
+Frame 81
+Next frame = 87
+
+Frame 84
+Sprite number = 9
+Sprite subnumber = 32769
+Duration = 1
+Next frame = 86
+
+Frame 85
+Sprite number = 13
+Sprite subnumber = 32768
+Duration = 3
+Next frame = 61
+
+Frame 86
+Sprite number = 9
+Duration = 30
+Next frame = 57
+
+Frame 87
+Duration = 1
+
+Frame 88
+Sprite number = 13
+Duration = 2
+
+Frame 89
+Sprite number = 13
+Duration = 2
+
+Frame 91
+Duration = 500
+
+Frame 92
+Duration = 500
+
+Frame 99
+Duration = 10
+
+Frame 100
+Duration = 8
+
+Frame 104
+Sprite subnumber = 2
+
+Frame 105
+Sprite subnumber = 3
+
+Frame 106
+Sprite subnumber = 4
+
+Frame 184
+Sprite number = 45
+Sprite subnumber = 6
+
+Frame 185
+Sprite number = 45
+Sprite subnumber = 32775
+Next frame = 741
+
+Frame 186
+Sprite number = 51
+Next frame = 728
+
+Frame 220
+Next frame = 222
+
+Frame 221
+Next frame = 230
+
+Frame 227
+Sprite number = 61
+Sprite subnumber = 1
+
+Frame 228
+Sprite number = 61
+Sprite subnumber = 2
+
+Frame 229
+Sprite number = 61
+Sprite subnumber = 3
+Duration = -1
+Next frame = 0
+
+Frame 230
+Sprite subnumber = 7
+
+Frame 231
+Sprite subnumber = 8
+
+Frame 232
+Sprite subnumber = 9
+
+Frame 233
+Sprite subnumber = 10
+
+Frame 234
+Sprite subnumber = 12
+Duration = 50
+
+Frame 235
+Sprite subnumber = 13
+Duration = 10
+Next frame = 209
+
+Frame 255
+Sprite subnumber = 32773
+
+Frame 263
+Sprite number = 40
+Sprite subnumber = 2
+
+Frame 264
+Sprite number = 40
+Sprite subnumber = 3
+Duration = 10
+
+Frame 265
+Sprite number = 40
+Sprite subnumber = 2
+Duration = 8
+Next frame = 704
+
+Frame 311
+Sprite subnumber = 0
+
+Frame 312
+Sprite subnumber = 1
+
+Frame 313
+Sprite subnumber = 2
+
+Frame 314
+Sprite subnumber = 1
+
+Frame 315
+Sprite subnumber = 2
+
+Frame 316
+Sprite number = 18
+
+Frame 317
+Sprite number = 18
+
+Frame 321
+Sprite number = 28
+
+Frame 322
+Sprite number = 28
+
+Frame 323
+Sprite number = 28
+Duration = 3
+
+Frame 324
+Sprite number = 28
+Duration = 3
+
+Frame 325
+Sprite number = 28
+Duration = 3
+
+Frame 326
+Sprite number = 28
+Duration = 3
+
+Frame 327
+Sprite number = 28
+Duration = 3
+
+Frame 328
+Sprite number = 28
+Duration = 3
+
+Frame 329
+Sprite number = 28
+Duration = 3
+
+Frame 330
+Sprite number = 28
+Duration = 3
+Next frame = 323
+
+Frame 331
+Sprite number = 28
+Sprite subnumber = 6
+Duration = 8
+
+Frame 332
+Sprite number = 28
+Duration = 12
+Next frame = 617
+
+Frame 335
+Sprite number = 49
+Sprite subnumber = 4
+Duration = 8
+
+Frame 336
+Sprite number = 49
+Sprite subnumber = 5
+Duration = 8
+
+Frame 337
+Sprite number = 49
+Sprite subnumber = 6
+Duration = 8
+
+Frame 338
+Sprite number = 49
+Sprite subnumber = 4
+Duration = 2
+Next frame = 562
+
+Frame 339
+Sprite number = 42
+Sprite subnumber = 4
+Duration = 5
+
+Frame 340
+Sprite number = 42
+Sprite subnumber = 5
+
+Frame 341
+Sprite number = 42
+Sprite subnumber = 5
+Duration = 20
+
+Frame 342
+Sprite number = 42
+Sprite subnumber = 6
+Duration = 5
+Next frame = 529
+
+Frame 343
+Sprite number = 42
+Sprite subnumber = 13
+
+Frame 344
+Sprite number = 42
+Sprite subnumber = 13
+Duration = 45
+Next frame = 0
+
+Frame 348
+Sprite number = 119
+Sprite subnumber = 0
+
+Frame 349
+Sprite number = 119
+Sprite subnumber = 1
+
+Frame 350
+Sprite number = 119
+Sprite subnumber = 2
+
+Frame 376
+Sprite number = 28
+Sprite subnumber = 4
+Duration = 4
+
+Frame 377
+Sprite number = 28
+Sprite subnumber = 32773
+Duration = 4
+
+Frame 378
+Sprite number = 28
+Sprite subnumber = 4
+Duration = 2
+
+Frame 379
+Sprite number = 28
+Sprite subnumber = 4
+Duration = 2
+
+Frame 380
+Sprite number = 28
+Sprite subnumber = 32773
+Duration = 4
+
+Frame 381
+Sprite number = 28
+Sprite subnumber = 4
+Duration = 2
+
+Frame 382
+Sprite number = 28
+Sprite subnumber = 4
+Duration = 2
+
+Frame 383
+Sprite number = 28
+Sprite subnumber = 32773
+Duration = 4
+
+Frame 384
+Sprite number = 28
+Sprite subnumber = 4
+Duration = 2
+
+Frame 385
+Sprite number = 28
+Sprite subnumber = 4
+Duration = 2
+Next frame = 323
+
+Frame 406
+Sprite number = 0
+Sprite subnumber = 6
+
+Frame 407
+Sprite number = 44
+Sprite subnumber = 4
+
+Frame 408
+Sprite number = 0
+Sprite subnumber = 6
+
+Frame 409
+Sprite number = 0
+Sprite subnumber = 6
+
+Frame 410
+Sprite number = 44
+Sprite subnumber = 4
+
+Frame 411
+Sprite number = 44
+Sprite subnumber = 4
+
+Frame 412
+Sprite number = 40
+Sprite subnumber = 4
+
+Frame 413
+Sprite number = 40
+Sprite subnumber = 4
+
+Frame 414
+Sprite number = 40
+Sprite subnumber = 5
+
+Frame 415
+Sprite number = 40
+Sprite subnumber = 5
+
+Frame 416
+Sprite number = 29
+
+Frame 417
+Sprite number = 29
+
+Frame 418
+Sprite number = 29
+Sprite subnumber = 32773
+
+Frame 419
+Sprite number = 29
+Sprite subnumber = 4
+
+Frame 420
+Sprite number = 45
+Sprite subnumber = 8
+Duration = 4
+
+Frame 421
+Sprite number = 45
+Sprite subnumber = 8
+Duration = 4
+
+Frame 453
+Sprite subnumber = 32773
+
+Frame 454
+Sprite subnumber = 4
+
+Frame 501
+Next frame = 0
+
+Frame 504
+Sprite number = 39
+Sprite subnumber = 9
+
+Frame 505
+Sprite number = 39
+Sprite subnumber = 10
+
+Frame 506
+Sprite number = 39
+Sprite subnumber = 11
+Next frame = 493
+
+Frame 507
+Sprite number = 44
+Sprite subnumber = 2
+
+Frame 508
+Sprite number = 44
+Sprite subnumber = 3
+Duration = 6
+
+Frame 509
+Sprite number = 44
+Sprite subnumber = 2
+Duration = 3
+Next frame = 558
+
+Frame 510
+Sprite number = 42
+Sprite subnumber = 13
+Duration = 10
+
+Frame 511
+Sprite number = 42
+Sprite subnumber = 0
+Duration = 10
+
+Frame 512
+Sprite number = 42
+Sprite subnumber = 13
+Duration = 10
+
+Frame 513
+Sprite number = 42
+Sprite subnumber = 0
+Duration = 10
+
+Frame 514
+Sprite number = 42
+Sprite subnumber = 13
+Duration = 10
+
+Frame 515
+Sprite number = 42
+Sprite subnumber = 0
+Duration = 10
+
+Frame 516
+Sprite number = 45
+Sprite subnumber = 16
+Duration = 10
+
+Frame 517
+Sprite number = 45
+Sprite subnumber = 17
+Duration = 10
+
+Frame 518
+Sprite number = 45
+Sprite subnumber = 18
+Duration = 10
+Next frame = 0
+
+Frame 519
+Sprite number = 42
+Sprite subnumber = 13
+Duration = 115
+Next frame = 704
+
+Frame 520
+Sprite subnumber = 10
+Duration = 25
+
+Frame 521
+Sprite subnumber = 11
+Duration = 5
+Next frame = 704
+
+Frame 544
+Duration = 6
+
+Frame 545
+Sprite subnumber = 32779
+Duration = 6
+
+Frame 546
+Sprite subnumber = 32780
+Duration = -1
+Next frame = 0
+
+Frame 547
+Sprite subnumber = 14
+Duration = 4
+Next frame = 547
+
+Frame 548
+Sprite number = 61
+Sprite subnumber = 0
+
+Frame 556
+Sprite number = 42
+Sprite subnumber = 13
+Duration = 20
+
+Frame 557
+Sprite number = 44
+Duration = 4
+Next frame = 557
+
+Frame 558
+Sprite number = 44
+Duration = 4
+
+Frame 559
+Sprite number = 44
+Sprite subnumber = 1
+Duration = 4
+Next frame = 558
+
+Frame 560
+Sprite number = 28
+Sprite subnumber = 2
+Duration = 4
+
+Frame 561
+Sprite number = 28
+Sprite subnumber = 3
+Duration = 4
+Next frame = 587
+
+Frame 562
+Sprite number = 49
+Sprite subnumber = 0
+Duration = 4
+
+Frame 563
+Sprite number = 49
+Sprite subnumber = 1
+Duration = 4
+
+Frame 564
+Sprite number = 49
+Sprite subnumber = 2
+Duration = 4
+
+Frame 565
+Sprite number = 49
+Duration = 4
+Next frame = 562
+
+Frame 569
+Sprite number = 120
+Sprite subnumber = 0
+Duration = 100
+
+Frame 570
+Sprite number = 120
+Sprite subnumber = 1
+Duration = 10
+Next frame = 569
+
+Frame 571
+Sprite number = 28
+Sprite subnumber = 6
+Next frame = 684
+
+Frame 573
+Sprite number = 28
+Sprite subnumber = 6
+Next frame = 376
+
+Frame 574
+Sprite number = 60
+Sprite subnumber = 0
+Duration = 5
+
+Frame 575
+Sprite number = 60
+Sprite subnumber = 1
+Duration = 5
+
+Frame 576
+Sprite number = 60
+Sprite subnumber = 2
+Duration = 5
+
+Frame 577
+Sprite number = 60
+Sprite subnumber = 3
+Duration = 5
+Next frame = 548
+
+Frame 585
+Sprite number = 28
+Sprite subnumber = 0
+Duration = 6
+
+Frame 586
+Sprite number = 28
+Sprite subnumber = 1
+Duration = 6
+
+Frame 587
+Sprite number = 28
+Sprite subnumber = 0
+Duration = 4
+
+Frame 588
+Sprite number = 28
+Sprite subnumber = 1
+Duration = 4
+Next frame = 560
+
+Frame 589
+Sprite subnumber = 2
+
+Frame 590
+Sprite subnumber = 3
+
+Frame 591
+Sprite subnumber = 10
+Duration = -1
+Next frame = 0
+
+Frame 592
+Sprite number = 45
+Sprite subnumber = 9
+Duration = 5
+Next frame = 595
+
+Frame 593
+Sprite number = 28
+Sprite subnumber = 6
+
+Frame 594
+Sprite number = 28
+Sprite subnumber = 6
+
+Frame 595
+Sprite number = 45
+Sprite subnumber = 10
+Duration = 5
+
+Frame 596
+Sprite number = 45
+Sprite subnumber = 11
+Duration = 5
+
+Frame 597
+Sprite number = 45
+Sprite subnumber = 12
+Duration = 5
+
+Frame 598
+Sprite number = 45
+Sprite subnumber = 13
+Duration = 5
+
+Frame 599
+Sprite number = 45
+Sprite subnumber = 14
+Duration = 50
+
+Frame 600
+Sprite number = 45
+Sprite subnumber = 15
+Duration = 10
+Next frame = 516
+
+Frame 603
+Sprite number = 107
+Duration = 100
+
+Frame 604
+Sprite number = 107
+Duration = 100
+Next frame = 603
+
+Frame 610
+Next frame = 603
+
+Frame 611
+Sprite subnumber = 16
+Duration = 10
+
+Frame 612
+Sprite subnumber = 17
+Duration = 10
+
+Frame 613
+Sprite subnumber = 18
+Duration = 10
+
+Frame 614
+Sprite number = 40
+Sprite subnumber = 6
+Duration = 10
+Next frame = 0
+
+Frame 615
+Sprite number = 30
+Sprite subnumber = 4
+Duration = 10
+
+Frame 616
+Sprite number = 30
+Sprite subnumber = 32773
+Duration = 10
+Next frame = 618
+
+Frame 617
+Sprite number = 28
+Sprite subnumber = 32773
+Duration = 6
+Next frame = 323
+
+Frame 618
+Sprite number = 30
+Sprite subnumber = 4
+Duration = 25
+
+Frame 619
+Sprite subnumber = 9
+Duration = 5
+
+Frame 620
+Sprite subnumber = 10
+Duration = 5
+Next frame = 627
+
+Frame 621
+Duration = 5
+
+Frame 622
+Duration = 5
+
+Frame 623
+Duration = 5
+
+Frame 624
+Duration = 5
+
+Frame 625
+Duration = 5
+
+Frame 626
+Duration = -1
+Next frame = 0
+
+Frame 627
+Sprite subnumber = 11
+Duration = 5
+
+Frame 628
+Sprite subnumber = 12
+Duration = 5
+
+Frame 629
+Sprite number = 40
+Sprite subnumber = 7
+Duration = 5
+
+Frame 630
+Sprite number = 40
+Sprite subnumber = 8
+Duration = 25
+
+Frame 631
+Sprite number = 40
+Sprite subnumber = 9
+Duration = 25
+Next frame = 520
+
+Frame 634
+Duration = 3
+
+Frame 642
+Next frame = 634
+
+Frame 647
+Sprite number = 29
+Sprite subnumber = 4
+
+Frame 648
+Sprite number = 29
+Sprite subnumber = 32773
+
+Frame 649
+Sprite number = 29
+Sprite subnumber = 4
+
+Frame 650
+Sprite number = 29
+Sprite subnumber = 32773
+Duration = 4
+
+Frame 667
+Sprite number = 42
+Sprite subnumber = 13
+
+Frame 668
+Sprite number = 42
+Sprite subnumber = 13
+
+Frame 676
+Sprite number = 117
+Duration = 25
+
+Frame 677
+Sprite number = 117
+Duration = 25
+Next frame = 676
+
+Frame 684
+Sprite number = 28
+
+Frame 685
+Sprite number = 28
+Sprite subnumber = 32773
+Duration = 3
+
+Frame 686
+Sprite number = 28
+Duration = 3
+
+Frame 687
+Sprite number = 28
+Sprite subnumber = 32773
+Duration = 3
+
+Frame 688
+Sprite number = 28
+Duration = 3
+
+Frame 689
+Sprite number = 28
+Sprite subnumber = 32773
+Duration = 3
+Next frame = 323
+
+Frame 690
+Sprite number = 40
+Sprite subnumber = 0
+Duration = 8
+Next frame = 562
+
+Frame 691
+Sprite subnumber = 8
+Duration = 5
+Next frame = 505
+
+Frame 692
+Sprite number = 44
+Sprite subnumber = 5
+Duration = 2
+
+Frame 693
+Sprite number = 44
+Sprite subnumber = 5
+Duration = 2
+
+Frame 694
+Sprite number = 44
+Sprite subnumber = 6
+Duration = 2
+
+Frame 695
+Sprite number = 44
+Sprite subnumber = 6
+Duration = 2
+
+Frame 696
+Sprite number = 44
+Sprite subnumber = 7
+Duration = 2
+
+Frame 697
+Sprite number = 44
+Sprite subnumber = 7
+Duration = 2
+
+Frame 698
+Sprite number = 44
+Sprite subnumber = 8
+Duration = 2
+
+Frame 699
+Sprite number = 44
+Sprite subnumber = 8
+Duration = 2
+
+Frame 700
+Sprite number = 44
+Sprite subnumber = 9
+
+Frame 704
+Sprite number = 45
+Sprite subnumber = 0
+Duration = 6
+
+Frame 705
+Sprite number = 45
+Duration = 6
+
+Frame 706
+Sprite number = 45
+Duration = 6
+
+Frame 707
+Sprite number = 45
+Sprite subnumber = 3
+Duration = 6
+Next frame = 704
+
+Frame 708
+Sprite number = 28
+Sprite subnumber = 0
+Duration = 1
+
+Frame 709
+Sprite number = 28
+Sprite subnumber = 0
+Duration = 1
+
+Frame 710
+Sprite number = 28
+Sprite subnumber = 0
+Duration = 1
+
+Frame 711
+Sprite number = 28
+Sprite subnumber = 0
+Duration = 1
+Next frame = 0
+
+Frame 714
+Sprite subnumber = 7
+
+Frame 715
+Sprite subnumber = 8
+
+Frame 716
+Sprite subnumber = 9
+
+Frame 717
+Sprite subnumber = 10
+
+Frame 718
+Sprite subnumber = 11
+
+Frame 719
+Sprite subnumber = 12
+Duration = -1
+
+Frame 738
+Next frame = 728
+
+Frame 739
+Sprite number = 29
+Sprite subnumber = 4
+Duration = 8
+
+Frame 740
+Sprite number = 29
+Sprite subnumber = 32773
+Duration = 8
+Next frame = 176
+
+Frame 741
+Sprite number = 40
+Sprite subnumber = 1
+Duration = 8
+Next frame = 185
+
+Frame 763
+Duration = 6
+
+Frame 778
+Duration = 5
+Next frame = 778
+
+Frame 780
+Sprite subnumber = 1
+
+Frame 831
+Sprite subnumber = 1
+
+Frame 842
+Sprite subnumber = 0
+Duration = -1
+Next frame = 0
+
+Frame 843
+Sprite subnumber = 1
+
+Frame 844
+Sprite subnumber = 2
+
+Frame 845
+Sprite subnumber = 3
+
+Frame 846
+Sprite subnumber = 2
+
+Frame 847
+Sprite subnumber = 1
+
+Frame 848
+Sprite subnumber = 0
+
+Frame 849
+Sprite subnumber = 1
+
+Frame 850
+Sprite subnumber = 2
+
+Frame 851
+Sprite subnumber = 3
+
+Frame 852
+Sprite subnumber = 0
+
+Frame 853
+Sprite subnumber = 0
+Duration = -1
+Next frame = 0
+
+Frame 854
+Sprite subnumber = 1
+
+Frame 855
+Sprite subnumber = 2
+
+Frame 856
+Sprite subnumber = 3
+
+Frame 861
+Sprite subnumber = 0
+
+Frame 862
+Sprite subnumber = 0
+
+Frame 863
+Sprite subnumber = 1
+
+Frame 864
+Sprite subnumber = 2
+
+Frame 865
+Sprite subnumber = 3
+
+Frame 866
+Sprite subnumber = 2
+
+Frame 867
+Sprite subnumber = 1
+
+Frame 908
+Sprite number = 107
+Duration = 200
+Next frame = 603
+
+Frame 910
+Sprite number = 117
+Duration = 50
+Next frame = 676
+
+Frame 917
+Sprite number = 42
+Sprite subnumber = 14
+Duration = -1
+Next frame = 0
+
+Frame 918
+Sprite subnumber = 0
+Next frame = 918
+
+Frame 919
+Sprite subnumber = 1
+Next frame = 919
+
+Frame 920
+Sprite subnumber = 2
+Next frame = 920
+
+Frame 921
+Sprite subnumber = 0
+
+Frame 922
+Sprite subnumber = 1
+
+Frame 923
+Sprite subnumber = 2
+
+Frame 960
+Next frame = 959
+
+Frame 961
+Sprite subnumber = 2
+Duration = 5
+Next frame = 961
+
+Frame 962
+Sprite subnumber = 3
+Duration = 5
+Next frame = 962
+
+Frame 964
+Next frame = 963
+
+Frame 965
+Sprite subnumber = 2
+Duration = 5
+Next frame = 965
+
+Ammo 0 (Bullets)
+Per ammo = 20
+
+Ammo 1 (Shells)
+Max ammo = 100
+Per ammo = 8
+
+Ammo 2 (Cells)
+Per ammo = 30
+
+Ammo 3 (Rockets)
+Max ammo = 400
+Per ammo = 40
+
+Weapon 5 (Plasma Gun)
+Shooting frame = 85
+Firing frame = 88
+
+Weapon 6 (BFG 9000)
+Ammo type = 3
+Shooting frame = 77
+Firing frame = 79
+
+Misc 0
+Monsters Infight = 221
+
+Text 9 11
+ZOMBIEMAN ALIEN EGG 
+
+Text 11 11
+SHOTGUN GUY  PREDATOR 
+
+Text 17 19
+HEAVY WEAPON DUDE       T1000       
+
+Text 3 3
+IMPT40
+
+Text 5 7
+DEMON T800  
+
+Text 9 11
+LOST SOULTUBE HUGGER
+
+Text 9 11
+CACODEMONFACEHUGGER 
+
+Text 11 11
+HELL KNIGHT   ALIEN   
+
+Text 13 15
+BARON OF HELL  ALIEN QUEEN  
+
+Text 11 11
+ARACHNOTRON   CLONE   
+
+Text 14 15
+PAIN ELEMENTAL CHAINGUNCLONE 
+
+Text 8 11
+REVENANTPLASMACLONE
+
+Text 8 11
+MANCUBUS SS NAZI   
+
+Text 9 11
+ARCH-VILEPOOR VICTIM
+
+Text 21 23
+THE SPIDER MASTERMIND   BIG BRAIN ROMERO    
+
+Text 14 15
+THE CYBERDEMONCOMMANDER KEEN 
+
+Text 8 11
+OUR HERO OUR HERO  
+
+Text 81 83
+                         The Ultimate DOOM Startup v%i.%i                                   DOOM Startup v%i.%i with Theme Doom Patch 1.7 by Werner Spahl           
+
+Text 80 83
+                         DOOM 2: Hell on Earth v%i.%i                                 DOOM 2: Hell on Earth v%i.%i with Theme Doom Patch 1.7 by Werner Spahl       
+
+Text 42 43
+You need a red key to activate this objectYou need to rescue the hostage first       
+
+Text 45 47
+You need a yellow key to activate this objectYou need a databoard to proceed               
+
+
+Text 37 39
+You need a blue key to open this doorYou need a blue key to open this door  
+
+Text 39 39
+You need a yellow key to open this doorYou need a databoard to proceed       
+
+
+Text 36 39
+You need a red key to open this doorYou need to rescue the hostage first   
+
+Text 25 27
+Picked up a blue keycard.Picked up a blue keycard!  
+
+Text 27 27
+Picked up a yellow keycard.Picked up the databoard!  
+
+
+Text 24 27
+Picked up a red keycard.You rescued the hostage!   
+
+Text 27 27
+Picked up a blue skull key.Picked up a blue keycard!  
+
+Text 29 31
+Picked up a yellow skull key.Picked up the databoard!      
+
+
+Text 26 27
+Picked up a red skull key.You rescued the hostage!   
+
+Text 27 27
+Picked up 4 shotgun shells.Picked up shotgun shells.  
+
+Text 30 31
+You got the BFG9000!  Oh, yes.A flamethrower! Let's barbecue!
+
+Text 28 31
+A chainsaw!  Find some meat!A chainsaw! Find some meat!    
+
+Text 28 31
+You got the rocket launcher!You got the rocketlauncher!    
+
+Text 23 23
+You got the plasma gun!You got the plasmagun! 

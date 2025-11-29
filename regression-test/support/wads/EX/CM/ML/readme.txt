@@ -1,0 +1,7 @@
+Master Levels go here:
+
+ATTACK.WAD
+BLACKTWR.WAD
+BLOODSEA.WAD
+...
+VIRGIL.WAD

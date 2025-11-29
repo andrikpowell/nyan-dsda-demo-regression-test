@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    parallel (1.27.0)
+
+PLATFORMS
+  x64-mingw-ucrt
+  x86_64-linux
+  x86_64-darwin-23
+
+DEPENDENCIES
+  parallel
+
+BUNDLED WITH
+   2.5.16

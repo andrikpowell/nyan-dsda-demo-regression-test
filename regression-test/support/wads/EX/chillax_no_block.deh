@@ -1,0 +1,40 @@
+Patch File for DeHackEd v3.0
+# Created with WhackEd4 1.1.2 BETA
+# Created by 38_ViTa_38 for chillax-v9.7.2.wad.
+
+Doom version = 21
+Patch format = 6
+
+
+Thing 102 (Swaying body)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 103 (Hanging arms out)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 104 (One-legged body)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 105 (Hanging torso)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 106 (Hanging leg)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 129 (Hanging body 1)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 130 (Hanging body 2)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 131 (Hanging body 3)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 132 (Hanging body 4)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 133 (Hanging body 5)
+Bits = SPAWNCEILING+NOGRAVITY
+
+Thing 134 (Hanging body 6)
+Bits = SPAWNCEILING+NOGRAVITY
