@@ -1,4 +1,4 @@
-# nyan/dsda doom demo regression test
+# Nyan / DSDA-Doom Demo Regression Test
 How to run the test:
 
 # Files needed
