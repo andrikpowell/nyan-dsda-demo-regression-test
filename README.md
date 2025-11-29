@@ -17,10 +17,11 @@ How to run the test:
 5) Setup paths / variables in `regression-test/support/dsda-test-prefs.rb` (you may need to adjust the amount of cores to use).
 
 # Running the test
-1) Run `ruby dsda-index.rb` to build the index of dsda demos.
-2) Once index is complete, run `ruby dsda-sync.rb` to download all demos.
-3) Run `ruby dsda-reg-test.rb` to run the entire regression test.
-4) When the test completes, `results.csv` and `failures.csv` (if there are failures) will be created in `regression-test/data-export/`.
+1) Enter the `regression-test` directory
+2) Run `ruby dsda-index.rb` to build the index of dsda demos.
+3) Once index is complete, run `ruby dsda-sync.rb` to download all demos.
+4) Run `ruby dsda-reg-test.rb` to run the entire regression test.
+5) When the test completes, `results.csv` and `failures.csv` (if there are failures) will be created in `regression-test/data-export/`.
 
 # Re-indexing / Re-syncing
 - If you want to grab any new demos, following the current dsda index you have, you can re-run `dsda-sync.rb` and it will only grab new demos.
