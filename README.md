@@ -41,7 +41,7 @@ overrun_missedbackside_emulate   1
 
 # Fixing Failures / Editing Overrides
 1) Once the test is completed, if there are failures they will be created in `regression-test/data-export/`.
-2) The test uses `Overrides.csv` to get specific demos to run correctly (or to force a skip)
+2) The test uses `Overrides.csv` (in `regression-test` directory) to get specific demos to run correctly (or to force a skip)
 3) Open both `Failures.csv` and `Overrides.csv`
 4) `Failures.csv` will include a cmdline and demo folder path for easy testing and troubleshooting.
 6) First, see if you can use the `IwadOverride`, `FileOverride`, or `ExtraArgs` fields to get the demo to sync
