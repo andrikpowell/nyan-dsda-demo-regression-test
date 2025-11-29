@@ -15,7 +15,7 @@ How to run the test:
 3) Install ruby (latest version).
 4) Install parallel with `gem install parallel`.
 5) Setup paths / variables in `regression-test/support/dsda-test-prefs.rb` (you may need to adjust the amount of cores to use).
-6) Make sure that all overflow warnings are set to false (`0`), but overflow emulations are set to true (`1`) in `nyan-doom.cfg` / `dsda-doom.cfg`:
+6) Make sure that all overflow warnings are set to false (`0`), but overflow emulations are set to true (`1`) in `nyan-doom.cfg` / `dsda-doom.cfg` (for both exes):
 ```
 # Overrun settings
 overrun_spechit_warn             0
