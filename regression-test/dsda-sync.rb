@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env ruby
+#!/usr/bin/env ruby
 # spec/dsda-sync.rb
 require_relative "support/dsda-common"
 include DSDA
