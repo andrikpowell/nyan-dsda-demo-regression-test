@@ -1,4 +1,4 @@
-﻿# frozen_string_literal: true
+# frozen_string_literal: true
 # spec/lib/dsda_common.rb
 require 'net/http'
 require 'uri'
