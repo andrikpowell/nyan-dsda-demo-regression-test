@@ -134,5 +134,12 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,windows,ruby
 
 regression-test/cache/
+regression-test/support/cache/
 regression-test/support/demos/
-
+regression-test/support/wads/*.wad
+regression-test/support/wads/*.WAD
+regression-test/support/wads/EX/CM/*.wad
+regression-test/support/wads/EX/CM/*.WAD
+regression-test/support/wads/EX/CM/ML*.wad
+regression-test/support/wads/EX/CM/ML*.WAD
+regression-test/7z.log

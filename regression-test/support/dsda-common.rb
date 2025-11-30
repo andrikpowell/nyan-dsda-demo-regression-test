@@ -102,7 +102,7 @@ module DSDA
     end
     candidates.map(&:to_s).map{|p| p.strip.gsub('"','') }.find do |p|
       if %w[7z 7zz].include?(p)
-        (system("#{p} --help >NUL 2>&1") rescue false) || (system("which #{p} > /dev/null 2>&1") rescue false)
+        (system("which #{p} >7z.log 2>&1") rescue false)
       else
         File.exist?(p)
       end
@@ -239,7 +239,7 @@ module DSDA
 
   def self.extract_with_7z(zip_path, dest)
     FileUtils.mkdir_p(dest)
-    cmd = "#{SEVEN_ZIP_BIN} x \"#{zip_path}\" -o\"#{dest}\" -y >NUL 2>&1"
+    cmd = "#{SEVEN_ZIP_BIN} x \"#{zip_path}\" -o\"#{dest}\" -y >7z.log 2>&1"
     puts "📂 Extracting #{File.basename(zip_path)} → #{dest} (via 7-Zip)"
     raise "Extraction failed for #{zip_path}" unless system(cmd)
     puts "🧰 Extracted successfully."
