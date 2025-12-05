@@ -201,7 +201,7 @@ def sanitize_cmdline(cmd)
   cmd = cmd.gsub("-fastdemo", "-playdemo")
 
 # 2) remove the unwanted flags
-  remove = %w[-nosound -nomusic -nodraw -levelstat -analysis]
+  remove = %w[-nosound -nomusic -nodraw -levelstat -analysis -noautoload]
   remove.each { |flag| cmd = cmd.gsub(flag, "") }
 
 # 3) collapse double spaces caused by removals
@@ -953,6 +953,7 @@ def run_demo_with_exe(
   add_flag(cmd, displaycmd, '-nodraw')
   add_flag(cmd, displaycmd, '-levelstat')
   add_flag(cmd, displaycmd, '-analysis')
+  add_flag(cmd, displaycmd, '-noautoload')
 
   # Add extra CLI arguments if provided
   if extra_args.any?
