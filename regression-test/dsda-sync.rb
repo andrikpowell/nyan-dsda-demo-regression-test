@@ -51,18 +51,6 @@ if options[:refresh_index]
   exit 1
 end
 
-wad_map = index ? index['wad_map'] : {}
-
-# iterate wads from wad_map or, if a user passed a single wad argument, handle below
-ARGV.each do |maybe_wad|
-  # user can pass single wad short_name on command line
-  if maybe_wad && !maybe_wad.strip.empty?
-    # do single-wad sync for that specific wad
-    sync_single = true
-    single_wad = maybe_wad
-  end
-end
-
 # Define sync_single_wad here to keep script self-contained and single-threaded
 def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos: false)
   puts "🔎 Fetching DSDA WAD metadata for: #{wad_slug}"
@@ -205,9 +193,6 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
       demo_id = demo['id'] || "unknown_#{idx}"
       zip_url = (demo['file'] || '').to_s.sub(/^http:/,'https:')
       zip_name  = File.basename(zip_url) rescue "demo_#{demo_id}.zip"
-      demo_base = File.basename(zip_name, ".zip")
-
-      # Raw ZIP-derived folder name
       demo_base = File.basename(zip_name, ".zip")
 
       # Final folder name that demos will be merged into
