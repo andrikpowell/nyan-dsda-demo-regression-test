@@ -14,6 +14,17 @@ require 'pathname'
 require 'securerandom'
 require_relative 'support/dsda-test-prefs'
 
+def consume_path_option!(names)
+  index = ARGV.index { |arg| names.include?(arg) }
+  return nil unless index
+
+  value = ARGV[index + 1]
+  abort("❌ Missing value for #{ARGV[index]}") if value.nil? || value.start_with?("--")
+
+  ARGV.slice!(index, 2)
+  File.expand_path(value)
+end
+
 exe_path_override = consume_path_option!(%w[--set_exe_path --set-exe-path])
 old_exe_path_override = consume_path_option!(%w[--set_old_exe_path --set-old-exe-path])
 
@@ -97,6 +108,62 @@ def safe_str(str)
   str.to_s.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
 rescue
   ""
+end
+
+def find_child_ci(dir, name)
+  return nil if dir.nil? || name.nil?
+  exact = File.join(dir, name)
+  return exact unless Dir.exist?(dir)
+
+  children = Dir.children(dir)
+  child = children.find { |entry| entry == name } ||
+          children.find { |entry| entry.casecmp?(name) }
+
+  child ? File.join(dir, child) : (File.exist?(exact) ? exact : nil)
+rescue SystemCallError
+  nil
+end
+
+def resolve_path_ci(base, relative)
+  return nil if base.nil? || relative.nil?
+  return relative if Pathname.new(relative.to_s).absolute? && File.exist?(relative)
+  return nil unless Dir.exist?(base)
+
+  current = base
+  relative.to_s.split(/[\/\\]+/).reject(&:empty?).each do |part|
+    current = find_child_ci(current, part)
+    return nil unless current
+  end
+
+  current
+end
+
+def files_with_ext_ci(dir, *extensions, recursive: false)
+  return [] unless Dir.exist?(dir)
+
+  wanted = extensions.flatten.map do |ext|
+    ext = ext.to_s.downcase
+    ext.start_with?('.') ? ext : ".#{ext}"
+  end
+
+  results = []
+  stack = [dir]
+
+  until stack.empty?
+    current = stack.pop
+    Dir.children(current).each do |entry|
+      path = File.join(current, entry)
+      if File.directory?(path)
+        stack << path if recursive
+      elsif wanted.include?(File.extname(entry).downcase)
+        results << path
+      end
+    end
+  end
+
+  results.sort
+rescue SystemCallError
+  []
 end
 
 def crash_message?(status)
@@ -196,8 +263,8 @@ def seconds_to_dsda_format(sec)
 end
 
 def extract_expected_times(demo_folder_path)
-  info_path = File.join(demo_folder_path, "DSDA-info.txt")
-  return [] unless File.exist?(info_path)
+  info_path = find_child_ci(demo_folder_path, "DSDA-info.txt")
+  return [] unless info_path && File.exist?(info_path)
 
   text = File.read(info_path, encoding: 'UTF-8')
   times = []
@@ -444,8 +511,14 @@ if ARGV.include?("--fill-demo-folder")
     wad  = row["WadFolder"]&.strip
     lmp  = row["DemoFile"]&.strip
 
-    demo_root = File.join(DEMOS_ROOT, iwad, wad)
-    matches = Dir.glob(File.join(demo_root, "**", lmp))
+    demo_root = iwad && wad ? resolve_path_ci(DEMOS_ROOT, File.join(iwad, wad)) : nil
+    matches =
+      if demo_root && lmp
+        files_with_ext_ci(demo_root, '.lmp', recursive: true)
+          .select { |path| File.basename(path).casecmp?(lmp) }
+      else
+        []
+      end
 
     if matches.any?
       folder = File.basename(File.dirname(matches[0]))
@@ -687,15 +760,15 @@ end
 
 def find_demo_textfile(demo_path)
   demo_dir   = File.dirname(demo_path)
-  base_name  = File.basename(demo_path, '.lmp')
+  base_name  = File.basename(demo_path, File.extname(demo_path))
 
   # 1. Direct textfile match
-  primary_txt = File.join(demo_dir, "#{base_name}.txt")
-  return primary_txt if File.exist?(primary_txt)
+  primary_txt = find_child_ci(demo_dir, "#{base_name}.txt")
+  return primary_txt if primary_txt && File.exist?(primary_txt)
 
   # 2. Any .txt except DSDA-info.txt
-  txts = Dir.glob(File.join(demo_dir, '*.txt'))
-            .reject { |t| File.basename(t).downcase == 'DSDA-info.txt' }
+  txts = files_with_ext_ci(demo_dir, '.txt')
+            .reject { |t| File.basename(t).casecmp?('DSDA-info.txt') }
 
   # If exactly one candidate remains, use it
   return txts.first if txts.size == 1
@@ -722,7 +795,7 @@ def find_matching_wad(demo_path, wad_files)
   folder_hint = safe_str(File.basename(demo_dir)).downcase
 
   wad_info = wad_files.map do |path|
-    base = File.basename(path, '.wad')
+    base = File.basename(path, File.extname(path))
     { path: path, base: base, lower: base.downcase }
   end
 
@@ -931,7 +1004,8 @@ def run_demo_with_exe(
   # ==========================================================
   if iwad && !iwad.empty?
     add_flag(cmd, displaycmd, '-iwad')
-    add_path(cmd, displaycmd, File.join(IWAD_WAD_PATH, iwad))
+    iwad_path = find_child_ci(IWAD_WAD_PATH, iwad) || File.join(IWAD_WAD_PATH, iwad)
+    add_path(cmd, displaycmd, iwad_path)
   end
 
   # ==========================================================
@@ -1265,8 +1339,11 @@ def select_demo_folders(raw_query)
   # -----------------------------------------
   if raw_query.nil?
     PRIMARY_IWADS.each do |iwad|
-      Dir.children(File.join(DEMOS_ROOT, iwad)).each do |wadname|
-        demo_folders.concat collect_demo_folders(iwad, wadname)
+      iwad_path = resolve_path_ci(DEMOS_ROOT, iwad)
+      next unless iwad_path && Dir.exist?(iwad_path)
+
+      Dir.children(iwad_path).each do |wadname|
+        demo_folders.concat collect_demo_folders(File.basename(iwad_path), wadname)
       end
     end
 
@@ -1286,11 +1363,11 @@ def select_demo_folders(raw_query)
 
     # --- NEW: if only IWAD is provided → run all wads under that IWAD ---
     unless wadname
-      iwad_path = File.join(DEMOS_ROOT, explicit_iwad)
-      abort("❌ No such IWAD directory: #{explicit_iwad}/") unless Dir.exist?(iwad_path)
+      iwad_path = resolve_path_ci(DEMOS_ROOT, explicit_iwad)
+      abort("❌ No such IWAD directory: #{explicit_iwad}/") unless iwad_path && Dir.exist?(iwad_path)
 
       Dir.children(iwad_path).each do |wadfolder|
-        demo_folders.concat collect_demo_folders(explicit_iwad, wadfolder)
+        demo_folders.concat collect_demo_folders(File.basename(iwad_path), wadfolder)
       end
 
       puts "🎯 Running all demos for IWAD #{explicit_iwad} (#{demo_folders.size} sets)"
@@ -1300,8 +1377,8 @@ def select_demo_folders(raw_query)
     abort("❌ No such wad directory: #{explicit_iwad}/#{wadname}") unless wad_exists?(explicit_iwad, wadname)
 
     if selector
-      full = File.join(DEMOS_ROOT, explicit_iwad, wadname, selector)
-      abort("❌ No match for #{explicit_iwad}/#{wadname}/#{selector}") unless File.exist?(full)
+      full = resolve_path_ci(DEMOS_ROOT, File.join(explicit_iwad, wadname, selector))
+      abort("❌ No match for #{explicit_iwad}/#{wadname}/#{selector}") unless full && File.exist?(full)
       demo_folders << full
       puts "🎯 Selected demo: #{full}"
     else
@@ -1324,8 +1401,8 @@ def select_demo_folders(raw_query)
   abort("❌ Wad '#{wadname}' not found in doom2/ doom/ plutonia/ tnt/") unless found_iwad
 
   if selector
-    full = File.join(DEMOS_ROOT, found_iwad, wadname, selector)
-    abort("❌ Selector '#{selector}' not found under #{found_iwad}/#{wadname}") unless File.exist?(full)
+    full = resolve_path_ci(DEMOS_ROOT, File.join(found_iwad, wadname, selector))
+    abort("❌ Selector '#{selector}' not found under #{found_iwad}/#{wadname}") unless full && File.exist?(full)
     demo_folders << full
   else
     demo_folders.concat collect_demo_folders(found_iwad, wadname)
@@ -1335,16 +1412,24 @@ def select_demo_folders(raw_query)
 end
 
 def wad_root_path(iwad)
-  File.join(DEMOS_ROOT, iwad)
+  resolve_path_ci(DEMOS_ROOT, iwad) || File.join(DEMOS_ROOT, iwad)
+end
+
+def wad_dir_path(iwad, wadname)
+  iwad_path = resolve_path_ci(DEMOS_ROOT, iwad)
+  return nil unless iwad_path
+
+  resolve_path_ci(iwad_path, wadname)
 end
 
 def wad_exists?(iwad, wadname)
-  Dir.exist?(File.join(DEMOS_ROOT, iwad, wadname))
+  path = wad_dir_path(iwad, wadname)
+  path && Dir.exist?(path)
 end
 
 def collect_demo_folders(iwad, wadname)
-  base = File.join(DEMOS_ROOT, iwad, wadname)
-  return [] unless Dir.exist?(base)
+  base = wad_dir_path(iwad, wadname)
+  return [] unless base && Dir.exist?(base)
 
   Dir.children(base).map { |child|
     File.join(base, child)
@@ -1353,7 +1438,7 @@ def collect_demo_folders(iwad, wadname)
     (
       File.directory?(path) &&
       File.basename(path).downcase !~ /-wad$/ &&
-      Dir.glob(File.join(path, "*.lmp")).any?
+      files_with_ext_ci(path, '.lmp').any?
     ) ||
     File.basename(path).casecmp?("manual")
   }
@@ -1394,12 +1479,17 @@ if FAILED_ONLY
 
   FAILED_DEMOS.each do |(iwad, wad), demofile_set|
     demofile_set.each do |demofile|
-      folder_path = File.join(DEMOS_ROOT, iwad, wad)
+      folder_path = wad_dir_path(iwad, wad)
 
       # Find the demo folder that actually contains this .lmp
-      matching = Dir.glob(File.join(folder_path, "*"))
-                    .select { |d| File.directory?(d) }
-                    .find { |d| File.exist?(File.join(d, demofile)) }
+      matching = if folder_path && Dir.exist?(folder_path)
+        Dir.children(folder_path)
+           .map { |child| File.join(folder_path, child) }
+           .select { |d| File.directory?(d) }
+           .find do |d|
+             files_with_ext_ci(d, '.lmp').any? { |lmp| File.basename(lmp).casecmp?(demofile) }
+           end
+      end
 
       if matching
         demo_folders << matching
@@ -1495,19 +1585,21 @@ def setup_demo_info(demo_folder_path, lmp_path)
   iwad_file  = "#{iwad_name}.wad"
 
   # Locate <wad_name>-wad directory
-  wad_folder_path  = File.join(DEMOS_ROOT, iwad_name, wad_name, "#{wad_name}-wad")
+  wad_root_path    = File.dirname(demo_folder_path)
+  wad_folder_path  = find_child_ci(wad_root_path, "#{wad_name}-wad") ||
+                     File.join(wad_root_path, "#{wad_name}-wad")
 
   # Collect WADs but EXCLUDE wadfolder/extra/*
-  wad_folder_wads = Dir.glob(File.join(wad_folder_path, '**', '*.wad'))
+  wad_folder_wads = files_with_ext_ci(wad_folder_path, '.wad', recursive: true)
     .reject { |p| p.match?(/(^|[\/\\])extra([\/\\])/i) }
 
   # Collect DEH/BEX but EXCLUDE wadfolder/extra/*
-  wad_folder_dehs = Dir.glob(File.join(wad_folder_path, '**', '*.{deh,bex}'))
+  wad_folder_dehs = files_with_ext_ci(wad_folder_path, '.deh', '.bex', recursive: true)
     .reject { |p| p.match?(/(^|[\/\\])extra([\/\\])/i) }
 
   # Scan demo folder for assets
-  demo_folder_wads = Dir.glob(File.join(demo_folder_path, '*.wad'))
-  demo_folder_dehs = Dir.glob(File.join(demo_folder_path, '*.{deh,bex}'))
+  demo_folder_wads = files_with_ext_ci(demo_folder_path, '.wad')
+  demo_folder_dehs = files_with_ext_ci(demo_folder_path, '.deh', '.bex')
 
   # Primary PWAD matching
   primary_wad = find_matching_wad(lmp_path, wad_folder_wads)
@@ -1569,26 +1661,37 @@ COMMERCIAL_PREFIXES = ["CM/", "ML/"].freeze
 def resolve_override_path(entry, demo_folder_path, wad_folder_path)
   # 1. Handle all special prefixes (demo_dir/, ML/, CM/)
   WAD_OVERRIDE_PATHS.each do |prefix, resolver|
-    next unless entry.start_with?(prefix)
+    next unless entry.downcase.start_with?(prefix.downcase)
 
-    rel  = entry.sub(prefix, "")
+    rel  = entry[prefix.length..]
     path = resolver.call(rel, demo_folder_path)
+    resolved = case prefix
+               when "demo_dir/"
+                 resolve_path_ci(demo_folder_path, rel)
+               when "EX/"
+                 resolve_path_ci(EXTRA_WAD_PATH, rel)
+               when "CM/"
+                 resolve_path_ci(COMMERCIAL_WAD_PATH, rel)
+               when "ML/"
+                 resolve_path_ci(MASTER_LEVELS_PATH, rel)
+               end
 
     # --- Commercial? Then missing file should not raise ---
     if COMMERCIAL_PREFIXES.include?(prefix)
-      return path if File.exist?(path)
+      return resolved if resolved && File.exist?(resolved)
       return [:commercial_missing, entry, path]
     end
 
     # --- Normal behavior (demo_dir/, EX/, etc) ---
-    return path if File.exist?(path)
+    return resolved if resolved && File.exist?(resolved)
 
     raise "Override file not found: #{entry} (expected at #{path})"
   end
 
   # 2. Normal override → resolve ONLY inside wadfolder
   path = File.join(wad_folder_path, entry)
-  return path if File.exist?(path)
+  resolved = resolve_path_ci(wad_folder_path, entry)
+  return resolved if resolved && File.exist?(resolved)
 
   raise "Override file not found: #{entry} (expected at #{path})"
 end
@@ -1712,7 +1815,7 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
 
     demo_folder_list.each do |demo_folder_path|
       # NEW: Scan demo folder for lmps
-      demo_lmps = Dir.glob(File.join(demo_folder_path, '*.lmp'))
+      demo_lmps = files_with_ext_ci(demo_folder_path, '.lmp')
 
       # Completely silence "manual" folders unless they actually contain demos
       if File.basename(demo_folder_path).casecmp?("manual")
