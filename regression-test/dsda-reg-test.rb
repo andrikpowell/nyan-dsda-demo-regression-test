@@ -14,6 +14,19 @@ require 'pathname'
 require 'securerandom'
 require_relative 'support/dsda-test-prefs'
 
+exe_path_override = consume_path_option!(%w[--set_exe_path --set-exe-path])
+old_exe_path_override = consume_path_option!(%w[--set_old_exe_path --set-old-exe-path])
+
+if exe_path_override
+  Object.send(:remove_const, :EXE_PATH)
+  EXE_PATH = exe_path_override
+end
+
+if old_exe_path_override
+  Object.send(:remove_const, :OLD_EXE_PATH)
+  OLD_EXE_PATH = old_exe_path_override
+end
+
 # ============================================================
 # Color helpers
 # ============================================================
