@@ -27,8 +27,8 @@ DEFAULT_IWAD     = 'doom2.wad'
 TIMEOUT_SECS     = 900
 HEARTBEAT_SECS   = 30
 
-# Amount of CPU cores to use (default: 75% of total)
-PERCENT_OF_CORES = 0.75
+# Amount of CPU cores to use (default: 50% of total)
+PERCENT_OF_CORES = 0.50
 
 module Utility
   extend self
