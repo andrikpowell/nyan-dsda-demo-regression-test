@@ -14,6 +14,42 @@ require 'pathname'
 require 'securerandom'
 require_relative 'support/dsda-test-prefs'
 
+def print_help
+  puts <<~HELP
+    Usage:
+      ruby dsda-reg-test.rb [IWAD[/WAD[/DEMO_FOLDER]]] [options]
+
+    Selectors:
+      ruby dsda-reg-test.rb
+      ruby dsda-reg-test.rb doom2
+      ruby dsda-reg-test.rb doom2/av
+      ruby dsda-reg-test.rb doom2/av/av01-123
+      ruby dsda-reg-test.rb av
+      ruby dsda-reg-test.rb av/av01-123
+
+    Options:
+      --failed-only
+          Re-run demos listed in failures.csv only.
+
+      --fill-demo-folder
+          Fill missing DemoFolder values in overrides.csv and exit.
+
+      --set_exe_path PATH, --set-exe-path PATH
+          Override the new engine executable for this run.
+
+      --set_old_exe_path PATH, --set-old-exe-path PATH
+          Override the old/reference engine executable for this run.
+
+      -h, --help
+          Show this help.
+  HELP
+end
+
+if ARGV.delete("-h") || ARGV.delete("--help")
+  print_help
+  exit 0
+end
+
 def consume_path_option!(names)
   index = ARGV.index { |arg| names.include?(arg) }
   return nil unless index
