@@ -480,12 +480,12 @@ def merge_failed_rows_into_results(failed_rows, results_path)
     end
   end
 
-  headers = existing_rows.first.keys
-
   if existing_rows.empty?
     puts red("❌ ERROR: results.csv appears empty")
     return
   end
+
+  headers = existing_rows.first.keys
 
   puts "   Loaded #{existing_rows.size} existing rows"
 
