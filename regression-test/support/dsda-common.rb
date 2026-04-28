@@ -351,7 +351,7 @@ module DSDA
   end
 
   # fast index function (can be multi-threaded)
-  def self.fast_index_all_pages(total_pages, threads: 5, max_retries: 5)
+  def self.fast_index_all_pages(total_pages, threads: 5, max_retries: 5, per: PER_PAGE)
     wad_map = Hash.new { |h,k| h[k] = [] }
     mutex   = Mutex.new
     work_q  = Queue.new
@@ -366,7 +366,7 @@ module DSDA
             break
           end
 
-          url = page == 1 ? "#{DSDA_API}/demos?per=#{PER_PAGE}" : "#{DSDA_API}/demos?per=#{PER_PAGE}&page=#{page}"
+          url = page == 1 ? "#{DSDA_API}/demos?per=#{per}" : "#{DSDA_API}/demos?per=#{per}&page=#{page}"
           begin
             data = http_get_json(url)
           rescue => e

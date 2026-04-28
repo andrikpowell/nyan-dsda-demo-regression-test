@@ -23,7 +23,7 @@ puts "ℹ️ Full index mode: total_pages=#{total_pages} (per=#{options[:per]})"
 
 start = Time.now
 puts "🚀 Parallel indexing using #{options[:threads]} threads..."
-wad_map = DSDA.fast_index_all_pages(total_pages, threads: options[:threads], max_retries: options[:max_retries])
+wad_map = DSDA.fast_index_all_pages(total_pages, threads: options[:threads], max_retries: options[:max_retries], per: options[:per])
 
 DSDA.save_index(wad_map, per: options[:per])
 elapsed = Time.now - start
