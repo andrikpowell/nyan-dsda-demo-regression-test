@@ -161,7 +161,11 @@ module DSDA
     uri = URI(url)
     Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme=='https') do |http|
       http.request_get(uri.path + (uri.query ? "?#{uri.query}" : "")) do |resp|
-        open(dest, "wb") do |io|
+        unless resp.is_a?(Net::HTTPSuccess)
+          raise "HTTP #{resp.code} while downloading #{url}"
+        end
+
+        File.open(dest, "wb") do |io|
           resp.read_body { |chunk| io.write(chunk) }
         end
       end
