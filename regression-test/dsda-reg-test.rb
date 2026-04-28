@@ -183,7 +183,7 @@ def seconds_to_dsda_format(sec)
 end
 
 def extract_expected_times(demo_folder_path)
-  info_path = File.join(demo_folder_path, "dsda-info.txt")
+  info_path = File.join(demo_folder_path, "DSDA-info.txt")
   return [] unless File.exist?(info_path)
 
   text = File.read(info_path, encoding: 'UTF-8')
@@ -317,7 +317,7 @@ def build_result_row(base:, override:, runtime:)
     deh:         base[:deh],               # "fix.deh ; extra/fix2.deh"
     demofile:    base[:demofile],          # single lmp name
 
-    # --------- DSDA-Info.txt Time ----------
+    # --------- DSDA-info.txt Time ----------
     expected:     runtime[:expected],
 
     # ---------- NEW engine results ----------
@@ -682,7 +682,7 @@ def find_demo_textfile(demo_path)
 
   # 2. Any .txt except DSDA-info.txt
   txts = Dir.glob(File.join(demo_dir, '*.txt'))
-            .reject { |t| File.basename(t).downcase == 'dsda-info.txt' }
+            .reject { |t| File.basename(t).downcase == 'DSDA-info.txt' }
 
   # If exactly one candidate remains, use it
   return txts.first if txts.size == 1

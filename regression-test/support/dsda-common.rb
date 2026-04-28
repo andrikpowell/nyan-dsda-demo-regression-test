@@ -420,7 +420,7 @@ module DSDA
   end
 
   # Merge temporary extracted demo folder into the final merged folder.
-  # Mirrors dsda-fix.rb behavior: merge .lmp + append dsda-info.txt blocks.
+  # Mirrors dsda-fix.rb behavior: merge .lmp + append DSDA-info.txt blocks.
   def self.merge_demo_dir(src, dest)
     FileUtils.mkdir_p(dest)
 
@@ -444,7 +444,7 @@ module DSDA
       end
     end
 
-    # 2) merge dsda-info.txt (append block)
+    # 2) merge DSDA-info.txt (append block)
     src_info = File.join(src, "DSDA-info.txt")
     if File.exist?(src_info)
       dest_info = File.join(dest, "DSDA-info.txt")
