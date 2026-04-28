@@ -25,6 +25,7 @@ FAILURES_OUTPUT  = File.expand_path('../data-export/failures.csv', __dir__)
 # Defaults
 DEFAULT_IWAD     = 'doom2.wad'
 TIMEOUT_SECS     = 900
+HEARTBEAT_SECS   = 30
 
 # Amount of CPU cores to use (default: 75% of total)
 PERCENT_OF_CORES = 0.75

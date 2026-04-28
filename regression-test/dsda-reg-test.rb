@@ -1421,7 +1421,7 @@ puts ("----------------------------------------------------------------------\n"
 # ============================================================
 Thread.new do
   loop do
-    sleep 60 # every minute
+    sleep HEARTBEAT_SECS
     $progress_mutex.synchronize do
 
       # stop once everything is done
