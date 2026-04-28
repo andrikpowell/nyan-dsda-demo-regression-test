@@ -59,14 +59,32 @@ overrun_missedbackside_emulate   1
 - However, if you need to grab demos from new wads, you will have to re-run `dsda-index.rb` to index the new wad first.
 
 # Options for Sync and Test
+- `dsda-index.rb`
+  - `--threads <#>` Indexing threads (default 5)
+  - `--per <#>` DSDA Demos Per-page (default 200)
+  - `--max-retries <#>` DSDA Website HTTP Retries per page
+  - `--help` Show commands
 - `dsda-sync.rb`
   - `--force` Force overwrite extracted content
   - `--skip-wads` Don't download/extract wad zips
   - `--skip-demos` Don't download/extract demo zips
   - `--retry-failed` Retry only failed demos
+  - `--refresh-index` Ignore cached index and build a new one *(recommended: run dsda-index.rb)*
+  - `--help` Show commands
 - `dsda-reg-test.rb`
-  - Running the test without any options wil run the entire test.
-  - `<iwad>` run all the demos for a single IWAD
-  - `<iwad>/<wad>` run all the demos for a single WAD
-  - `<iwad>/<wad>/<demo>` run all the demos inside a single demo folder
-  - `--failed-only` run only the demos that failed during the last test (see `regression-test/data-export/failures.csv`).
+  - Running the test without any options will run the entire test.
+  - Usage:
+    - `ruby dsda-reg-test.rb [IWAD[/WAD[/DEMO_FOLDER]]] [options]`
+  - Examples:
+    - `ruby dsda-reg-test.rb`
+    - `ruby dsda-reg-test.rb doom2`
+    - `ruby dsda-reg-test.rb doom2/av`
+    - `ruby dsda-reg-test.rb doom2/av/av01-123`
+    - `ruby dsda-reg-test.rb av`
+    - `ruby dsda-reg-test.rb av/av01-123` 
+  - Options:
+    - `--failed-only` run only the demos that failed during the last test (see `regression-test/data-export/failures.csv`).
+    - `--fill-demo-folder` Fill missing DemoFolder values in `overrides.csv` and exit.
+    - `--set-exe-path <PATH>` Override the new engine executable for this run.
+    - `--set-old-exe-path <PATH>` Override the old/reference engine executable for this run.
+    - `--help` Show commands
