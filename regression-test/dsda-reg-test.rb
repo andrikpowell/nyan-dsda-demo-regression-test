@@ -751,6 +751,8 @@ end
 def classify_regression(new_result:, old_result:, new_reason:, old_reason:, override_action:)
   override_skip = override_action.to_s.strip.downcase == "skip"
   override_autoskip = override_action.to_s.strip.downcase == "not run"
+  new_failed = %w[fail crash timeout].include?(new_result.to_s)
+  old_failed = %w[fail crash timeout].include?(old_result.to_s)
 
   # -------------------------------------
   # Special case: Auto skip override
@@ -775,7 +777,7 @@ def classify_regression(new_result:, old_result:, new_reason:, old_reason:, over
     end
 
     # NEW fails, OLD passes → true regression
-    if new_result == "fail" && old_result == "pass"
+    if new_failed && old_result == "pass"
       return {
         match: "fail - regression",
         ui_message: "FAIL 🔴 regression found",
@@ -783,7 +785,7 @@ def classify_regression(new_result:, old_result:, new_reason:, old_reason:, over
     end
 
     # Both fail: check reason
-    if new_result == "fail" && old_result == "fail"
+    if new_failed && old_failed
       if new_reason == old_reason
         return {
           match: "skip",
@@ -813,6 +815,28 @@ def classify_regression(new_result:, old_result:, new_reason:, old_reason:, over
     return {
       match: "fail - timeout",
       ui_message: "FAIL 🔴 unexpected freeze/timeout",
+    }
+  end
+
+  # Crashes are failures too
+  if new_result == "crash" || old_result == "crash"
+    if new_result == old_result && new_reason == old_reason
+      return {
+        match: "fail - match",
+        ui_message: "FAIL 🔴 both crashed the same way",
+      }
+    end
+
+    if new_result == "crash" && old_result == "pass"
+      return {
+        match: "fail - regression",
+        ui_message: "FAIL 🔴 regression (NEW crashes, OLD passes)",
+      }
+    end
+
+    return {
+      match: "fail - regression",
+      ui_message: "FAIL 🔴 regression (crash behavior changed)",
     }
   end
 
@@ -846,6 +870,11 @@ def classify_regression(new_result:, old_result:, new_reason:, old_reason:, over
       }
     end
   end
+
+  {
+    match: "fail - unknown",
+    ui_message: "FAIL 🔴 unable to get result (NEW=#{new_result.inspect}, OLD=#{old_result.inspect})",
+  }
 end
 
 # ============================================================
