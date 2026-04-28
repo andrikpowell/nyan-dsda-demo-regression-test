@@ -62,7 +62,7 @@ overrun_missedbackside_emulate   1
 - `dsda-index.rb`
   - `--threads <#>` Indexing threads (default 5)
   - `--per <#>` DSDA Demos Per-page (default 200)
-  - `--max-retries <#>` DSDA Website HTTP Retries per page
+  - `--max-retries <#>` DSDA Website HTTP Retries per page (default 5)
   - `--help` Show commands
 - `dsda-sync.rb`
   - `--force` Force overwrite extracted content
