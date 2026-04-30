@@ -146,6 +146,8 @@ CMakePresets.json
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,windows,ruby
 
+# Regression Test Files
+regression-test/7z.log
 regression-test/cache/
 regression-test/support/cache/
 regression-test/support/demos/
@@ -155,4 +157,9 @@ regression-test/support/wads/EX/CM/*.wad
 regression-test/support/wads/EX/CM/*.WAD
 regression-test/support/wads/EX/CM/ML/*.wad
 regression-test/support/wads/EX/CM/ML/*.WAD
-regression-test/7z.log
+regression-test/support/wads/EX/CM/ML/*.txt
+regression-test/support/wads/EX/CM/ML/*.TXT
+
+# Ignore super large wads (you must get manually)
+regression-test/support/wads/EX/Eviternity II.wad
+regression-test/support/wads/EX/Junkfood4.wad
