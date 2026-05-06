@@ -160,6 +160,12 @@ regression-test/support/wads/EX/CM/ML/*.WAD
 regression-test/support/wads/EX/CM/ML/*.txt
 regression-test/support/wads/EX/CM/ML/*.TXT
 
+# Ignore results/failures
+regression-test/data-export/**
+
+# Ignore sync warning log
+regression-test/dsda-sync-warning.txt
+
 # Ignore super large wads (you must get manually)
 regression-test/support/wads/EX/Eviternity II.wad
 regression-test/support/wads/EX/Junkfood4.wad
