@@ -22,6 +22,25 @@ module DSDA
     File.expand_path('cache/dsda_demo_index.json', base_dir)
   end
 
+  def self.demo_root_path(base_dir = __dir__ + '/..')
+    File.expand_path('support/demos', base_dir)
+  end
+
+  def self.display_path(path, base_dir = demo_root_path)
+    absolute_path = File.expand_path(path.to_s)
+    absolute_base = File.expand_path(base_dir.to_s)
+    normalized_path = absolute_path.tr('\\', '/')
+    normalized_base = absolute_base.tr('\\', '/').sub(%r{/+\z}, '')
+
+    if normalized_path.downcase == normalized_base.downcase
+      '/'
+    elsif normalized_path.downcase.start_with?("#{normalized_base.downcase}/")
+      "/#{normalized_path[(normalized_base.length + 1)..]}"
+    else
+      path.to_s.tr('\\', '/')
+    end
+  end
+
   # engines to skip
   SKIP_ENGINE_PATTERNS = [
     /gzdoom/i, /zdoom/i, /lzdoom/i, /doom\s*legacy/i,
@@ -312,7 +331,7 @@ module DSDA
   def self.extract_with_7z(zip_path, dest)
     FileUtils.mkdir_p(dest)
     cmd = "#{SEVEN_ZIP_BIN} x \"#{zip_path}\" -o\"#{dest}\" -y >7z.log 2>&1"
-    puts "📂 Extracting #{File.basename(zip_path)} → #{dest} (via 7-Zip)"
+    puts "📂 Extracting #{File.basename(zip_path)} → #{display_path(dest)} (via 7-Zip)"
     raise "Extraction failed for #{zip_path}" unless system(cmd)
     puts "🧰 Extracted successfully."
   end

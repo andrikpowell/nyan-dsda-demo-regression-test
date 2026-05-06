@@ -198,7 +198,7 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
 
         # If forcing, clean the wad_dir but *preserve* any existing /extra folder
         if force && Dir.exist?(wad_dir)
-          puts "🧹 Cleaning WAD dir (preserving /extra): #{wad_dir}"
+          puts "🧹 Cleaning WAD dir (preserving /extra): #{DSDA.display_path(wad_dir, File.expand_path('support', SCRIPT_DIR))}"
           Dir.children(wad_dir).each do |entry|
             # keep extra/ (case-insensitive, just in case)
             next if entry.downcase == "extra"
@@ -243,7 +243,7 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
       "Total demos" => demo_count,
       "Notes"       => (wad_meta['description'] || "")
     })
-    puts "📝 WAD DSDA-info.txt written to #{info_path}"
+    puts "📝 WAD DSDA-info.txt written to #{DSDA.display_path(info_path)}"
     state['done_wads'][short] = true
     DSDA.save_state(state, DSDA.state_cache_path)
   end
@@ -339,7 +339,7 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
 
         # Merge temp folder into the final merged folder
         DSDA.merge_demo_dir(temp_demo_folder, merged_demo_folder)
-        puts "📝 Merged demo into #{merged_demo_folder}"
+        puts "📝 Merged demo into #{DSDA.display_path(merged_demo_folder)}"
 
         state['done_demos'][demo_id.to_s] = "ok"
         DSDA.save_state(state, DSDA.state_cache_path)
