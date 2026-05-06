@@ -184,6 +184,29 @@ module DSDA
     SKIP_ENGINE_PATTERNS.any? { |pat| engine =~ pat }
   end
 
+  def self.excluded_demo_zip_reason(iwad:, wad:, zip_name:, demo_id: nil, zip_url: nil)
+    return nil unless Object.const_defined?(:EXCLUDED_DEMO_ZIPS)
+
+    exclusions = Object.const_get(:EXCLUDED_DEMO_ZIPS)
+    return nil unless exclusions.respond_to?(:each)
+
+    normalized = {}
+    exclusions.each do |key, reason|
+      normalized[key.to_s.downcase] = reason.to_s
+    end
+
+    candidates = [
+      "#{iwad}/#{wad}/#{zip_name}",
+      "#{wad}/#{zip_name}",
+      zip_name,
+      demo_id && "demo:#{demo_id}",
+      zip_url
+    ].compact.map { |value| value.to_s.downcase }
+
+    match = candidates.find { |candidate| normalized.key?(candidate) }
+    match ? normalized[match] : nil
+  end
+
   def self.detect_7z
     host_os = RbConfig::CONFIG['host_os'].downcase
     candidates = if host_os =~ /mswin|mingw|cygwin/
@@ -301,6 +324,16 @@ module DSDA
         demo_base = File.basename(zip_name, ".zip")
 
         puts "   ↻ demo #{demo_id}"
+
+        if reason = excluded_demo_zip_reason(iwad: iwad, wad: short, zip_name: zip_name, demo_id: demo_id, zip_url: zip_url)
+          puts "     ⚠️ skipping excluded zip: #{zip_name} (#{reason})"
+          state["done_demos"][demo_id.to_s] = "skipped_zip:#{zip_name}"
+          state["failed_demos"].delete(demo_id.to_s)
+          save_state(state, state_cache_path)
+          puts
+          next
+        end
+
         puts "     ⬇️ retry downloading..."
 
         tmp_zip = File.join(wad_root, zip_name)

@@ -27,6 +27,12 @@ DEFAULT_IWAD     = 'doom2.wad'
 TIMEOUT_SECS     = 900
 HEARTBEAT_SECS   = 30
 
+# Known broken demo ZIPs from DSDA that should not be downloaded/extracted.
+# Keys may be scoped as "iwad/wad/zipname.zip" or global as "zipname.zip".
+EXCLUDED_DEMO_ZIPS = {
+  "doom2/doom2/peter_nm100s.zip" => "Known broken ZIP on DSDA server",
+}.freeze
+
 # Amount of CPU cores to use (default: 50% of total)
 PERCENT_OF_CORES = 0.50
 

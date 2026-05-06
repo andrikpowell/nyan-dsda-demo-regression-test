@@ -291,6 +291,15 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
         next
       end
 
+      if reason = DSDA.excluded_demo_zip_reason(iwad: iwad, wad: short, zip_name: zip_name, demo_id: demo_id, zip_url: zip_url)
+        puts "⚠️ Skipping demo (excluded ZIP: #{zip_name}) #{reason}"
+        state['done_demos'][demo_id.to_s] = "skipped_zip:#{zip_name}"
+        state['failed_demos'].delete(demo_id.to_s)
+        DSDA.save_state(state, DSDA.state_cache_path)
+        puts
+        next
+      end
+
       # If we already processed this demo_id and the merged folder has content,
       # we can safely skip (re-running the sync) unless forcing.
       if state['done_demos'][demo_id.to_s] && DSDA.content_present?(merged_demo_folder) && !force
