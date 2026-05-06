@@ -1465,6 +1465,7 @@ def collect_demo_folders(iwad, wadname)
 end
 
 FAILED_DEMOS = load_failures_list
+FAILED_ONLY_UNRESOLVED = []
 
 if FAILED_ONLY
   puts "🔁 Running ONLY failed demos from failures.csv..."
@@ -1515,6 +1516,7 @@ if FAILED_ONLY
         demo_folders << matching
       else
         puts red("❌ Failed-only: could not locate demo folder for #{iwad}/#{wad}/#{demofile}")
+        FAILED_ONLY_UNRESOLVED << "#{iwad}/#{wad}/#{demofile}"
       end
     end
   end
@@ -2396,13 +2398,27 @@ puts green("--------------------------------------------------------------------
 
 total  = results.size
 failed = results.count { |r| r[:match].start_with?("fail") }
+skipped = results.count { |r| r[:match].to_s == "skip" }
+known_skip_reason = lambda do |reason|
+  normalized = reason.to_s.downcase
+                     .sub(/\A\[/, '')
+                     .sub(/\]\s*auto-skip\z/, '')
+                     .strip
+  SKIP_IMMEDIATE.include?(normalized)
+end
+failed_only_unresolved_skips = results.count do |r|
+  r[:match].to_s == "skip" &&
+    r[:action].to_s.strip.downcase != "skip" &&
+    !known_skip_reason.call(r[:reason])
+end
 passed = total - failed
 
 duration = Time.now - global_start_time
 percent = (passed.to_f / [total, 1].max * 100)
 percent = percent % 1 == 0 ? percent.to_i : percent.round(1)
 
-full_pass = passed == total
+failed_only_incomplete = FAILED_ONLY && (total == 0 || FAILED_ONLY_UNRESOLVED.any? || failed_only_unresolved_skips > 0)
+full_pass = passed == total && !failed_only_incomplete
 regressions = results.count { |r| r[:match].include?("regression") }
 
 if full_pass && (regressions == 0)
@@ -2422,6 +2438,18 @@ else
 end
 
 puts "\n#{summary}"
+
+if FAILED_ONLY && total == 0
+  puts red("❌ Failed-only produced no runnable results; keeping failures.csv")
+end
+
+if FAILED_ONLY_UNRESOLVED.any?
+  puts red("❌ Failed-only could not locate #{FAILED_ONLY_UNRESOLVED.size} demo#{'s' if FAILED_ONLY_UNRESOLVED.size != 1}; keeping failures.csv")
+end
+
+if FAILED_ONLY && failed_only_unresolved_skips > 0
+  puts yellow("⚠️ Failed-only produced #{failed_only_unresolved_skips} unresolved skipped result#{'s' if failed_only_unresolved_skips != 1}; keeping failures.csv")
+end
 
 reg_summary = if regressions == 0
   green("✅ with no regressions")
@@ -2516,20 +2544,20 @@ end
 # Shared countdown if either file is locked
 # ============================================================
 
-def try_save_all_csvs(sorted, failures)
+def try_save_all_csvs(sorted, failures, preserve_failures: false)
   # Base task list always includes results.csv
   tasks = [
     { name: "results", output: CSV_OUTPUT, data: sorted, merge_failed_only: true }
   ]
 
-  # Create backups before writing anything
-  tasks.each do |t|
-    backup_csv(t[:output])
-  end
-
   # Only add failures.csv if there are real failures
   if failures.any?
     tasks << { name: "failures", output: FAILURES_OUTPUT, data: failures, merge_failed_only: false }
+  end
+
+  # Create backups before writing anything
+  tasks.each do |t|
+    backup_csv(t[:output])
   end
 
   locked = {}
@@ -2546,9 +2574,13 @@ def try_save_all_csvs(sorted, failures)
   # If nothing is locked → perform cleanup *and then exit*
   if locked.empty?
     if failures.empty? && File.exist?(FAILURES_OUTPUT)
-      backup_csv(FAILURES_OUTPUT)
-      FileUtils.rm_f(FAILURES_OUTPUT)
-      puts green("🧹 No failures detected — removed #{FAILURES_OUTPUT}")
+      if preserve_failures
+        puts yellow("⚠️ Keeping #{FAILURES_OUTPUT} because failed-only did not fully clear all requested demos")
+      else
+        backup_csv(FAILURES_OUTPUT)
+        FileUtils.rm_f(FAILURES_OUTPUT)
+        puts green("🧹 No failures detected — removed #{FAILURES_OUTPUT}")
+      end
     end
 
     return
@@ -2657,6 +2689,6 @@ end
 # ============================================================
 
 failures = sorted.select { |r| r[:match].to_s.start_with?("fail") }
-try_save_all_csvs(sorted, failures)
+try_save_all_csvs(sorted, failures, preserve_failures: failed_only_incomplete)
 
 puts "\n\n"
