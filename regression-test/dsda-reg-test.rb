@@ -1662,6 +1662,26 @@ WAD_OVERRIDE_PATHS = {
 # commercial wads are optional
 COMMERCIAL_PREFIXES = ["CM/", "ML/"].freeze
 
+def auto_file_override_entries(env)
+  return [] unless defined?(AUTO_FILE_OVERRIDES)
+
+  key = "#{env[:iwad_name]}/#{env[:wad_name]}".downcase
+  spec = AUTO_FILE_OVERRIDES[key]
+  return [] unless spec
+
+  entries =
+    if spec.is_a?(Hash)
+      demo_folder = env[:demo_foldername].to_s.downcase
+      demo_folder_specs = spec[:demo_folders] || spec["demo_folders"] || {}
+      demo_overrides = demo_folder_specs.transform_keys { |k| k.to_s.downcase }
+      demo_overrides[demo_folder] || spec[:default] || spec["default"]
+    else
+      spec
+    end
+
+  Array(entries).map(&:to_s).reject(&:empty?)
+end
+
 def resolve_override_path(entry, demo_folder_path, wad_folder_path)
   # 1. Handle all special prefixes (demo_dir/, ML/, CM/)
   WAD_OVERRIDE_PATHS.each do |prefix, resolver|
@@ -1709,7 +1729,7 @@ def prepare_demo_info(env)
 
   default_wads = []
 
-  # 1. Primary wav (picked from wadfolder-wad)
+  # 1. Primary wad (picked from wadfolder-wad)
   if env[:primary_wad]
     default_wads << env[:primary_wad]
   end
@@ -1725,6 +1745,21 @@ def prepare_demo_info(env)
   extra_args = []
   override_iwad_flag = false
   final_override_files = nil
+  explicit_file_override = override &&
+                           override[:action] == "override" &&
+                           override[:file_override] &&
+                           !override[:file_override].empty?
+
+  unless explicit_file_override
+    auto_override_list = auto_file_override_entries(env)
+    if auto_override_list.any?
+      final_wads = auto_override_list.map do |entry|
+        resolve_override_path(entry, demo_folder_path, wad_folder_path)
+      end
+      final_wads.concat(env[:demo_folder_wads])
+      final_wads.uniq!
+    end
+  end
 
   # Apply overrides
   if override && override[:action] == "override"

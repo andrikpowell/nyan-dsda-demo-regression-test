@@ -33,6 +33,42 @@ EXCLUDED_DEMO_ZIPS = {
   "doom2/doom2/peter_nm100s.zip" => "Known broken ZIP on DSDA server",
 }.freeze
 
+# Known commercial/master-level WAD defaults.
+# CSV FileOverride entries still win when a demo needs a specific exception.
+AUTO_FILE_OVERRIDES = {
+  "hexen/hexdd"         => ["CM/hexdd.wad"],
+  "doom2/hell2pay"      => ["CM/HTP-RAW.WAD"],
+  "doom2/id1"           => ["CM/id1.wad"],
+  "doom2/nerve"         => ["CM/nerve.wad"],
+  "doom2/one-humanity"  => ["CM/one-humanity.wad"],
+
+# Master Levels
+  "doom2/attack_ml"   => ["ML/ATTACK.WAD"],
+  "doom2/blacktwr"    => ["ML/BLACKTWR.WAD"],
+  "doom2/bloodsea"    => ["ML/BLOODSEA.WAD"],
+  "doom2/canyon_ml"   => ["ML/CANYON.WAD"],
+  "doom2/catwalk"     => ["ML/CATWALK.WAD"],
+  "doom2/combine"     => ["ML/COMBINE.WAD"],
+  "doom2/fistula"     => ["ML/FISTULA.WAD"],
+  "doom2/garrison"    => ["ML/GARRISON.WAD"],
+  "doom2/geryon"      => ["ML/GERYON.WAD"],
+  "doom2/manor_ml"    => ["ML/MANOR.WAD"],
+  "doom2/mephisto"    => ["ML/MEPHISTO.WAD"],
+  "doom2/minos"       => ["ML/MINOS.WAD"],
+  "doom2/nessus"      => ["ML/NESSUS.WAD"],
+  "doom2/paradox_ml"  => ["ML/PARADOX.WAD"],
+  "doom2/subspace"    => ["ML/SUBSPACE.WAD"],
+  "doom2/subterra"    => ["ML/SUBTERRA.WAD"],
+  "doom2/teeth"       => ["ML/TEETH.WAD"],
+  "doom2/ttrap"       => ["ML/TTRAP.WAD"],
+  "doom2/vesperas"    => ["ML/VESPERAS.WAD"],
+  "doom2/vergil"      => ["ML/VERGIL.WAD"],
+
+# Special Pwads
+  "doom2/eviternityii" => ["EX/Eviternity II.wad"],
+  "doom2/junkfood4"    => ["EX/Junkfood4.wad"],
+}.freeze
+
 # Amount of CPU cores to use (default: 50% of total)
 PERCENT_OF_CORES = 0.50
 
