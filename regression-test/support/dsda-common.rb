@@ -13,7 +13,7 @@ module DSDA
   USER_AGENT = "NYAN-DSDA-SYNC/1.0"
   PER_PAGE = 200
 
-  # caches/state paths (consumer may override if desired)
+  # caches/state paths
   def self.state_cache_path(base_dir = __dir__ + '/..')
     File.expand_path('cache/dsda_sync_state.json', base_dir)
   end
@@ -51,7 +51,7 @@ module DSDA
   INDEX_WRITE_MUTEX = Mutex.new
 
   # ============================================================
-  # Time
+  # Time format
   # ============================================================
 
   def format_duration(seconds)
@@ -308,7 +308,9 @@ module DSDA
         begin
           download_file(zip_url, tmp_zip)
         rescue => e
-          puts "     ❌ still failing: #{e.message}"
+          puts red("     ❌ Demo download failed: #{zip_name}")
+          puts "        #{e.message}"
+          puts
           next
         end
 
@@ -317,11 +319,14 @@ module DSDA
           cleanup_unwanted_files(demo_folder)
           File.delete(tmp_zip) if File.exist?(tmp_zip)
         rescue => e
-          puts "     ❌ extraction still failing: #{e.message}"
+          puts red("     ❌ Demo extraction failed: #{zip_name}")
+          puts "        #{e.message}"
+          puts
           next
         end
 
-        puts "     ✅ success!"
+        puts green("     ✅ Demo extraction successful")
+        puts
         state["done_demos"][demo_id.to_s] = "ok"
         state["failed_demos"].delete(demo_id.to_s)
       end

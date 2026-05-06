@@ -64,6 +64,11 @@ def fetch_wad_meta(wad_slug)
   end
 end
 
+def demo_zip_name(demo)
+  zip_url = (demo['file'] || '').to_s.sub(/^http:/,'https:')
+  File.basename(zip_url) rescue "demo_#{demo['id']}.zip"
+end
+
 def find_wad_key(wad_map, query)
   return nil if query.nil?
 
@@ -173,6 +178,7 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
   end
   zip_filename ||= "#{wad_name}.zip"
   zip_path = File.join(wad_root, zip_filename)
+  wad_extraction_successful = false
 
   unless skip_wads
     if has_downloadable_wad
@@ -212,10 +218,12 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
           DSDA.extract_with_7z(zip_path, wad_dir)
           DSDA.cleanup_unwanted_files(wad_dir)
         rescue => e
+          puts red("❌ WAD extraction failed: #{File.basename(zip_path)}")
           raise "Extraction failed: #{e}"
         ensure
           File.delete(zip_path) if File.exist?(zip_path)
         end
+        wad_extraction_successful = true
 
         state['wad_meta'][short] = {
           'file' => wad_zip_url,
@@ -262,12 +270,15 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
     end
 
     puts "📊 Found #{demos.length} demo entries for #{wad_slug}"
+    puts green("✅ WAD extraction successful") if wad_extraction_successful
+    puts
+    puts "🎬 Starting sync for #{iwad}/#{wad_name} demos"
 
     demos.each_with_index do |demo, idx|
       demo ||= {}
       demo_id = demo['id'] || "unknown_#{idx}"
       zip_url = (demo['file'] || '').to_s.sub(/^http:/,'https:')
-      zip_name  = File.basename(zip_url) rescue "demo_#{demo_id}.zip"
+      zip_name = demo_zip_name(demo)
       demo_base = File.basename(zip_name, ".zip")
 
       # Final folder name that demos will be merged into
@@ -282,6 +293,7 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
         puts "⚠️ Skipping demo (unsupported engine: #{engine}) #{zip_name}"
         state['done_demos'][demo_id.to_s] = "skipped_engine:#{engine}"
         DSDA.save_state(state, DSDA.state_cache_path)
+        puts
         next
       end
 
@@ -289,6 +301,7 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
       # we can safely skip (re-running the sync) unless forcing.
       if state['done_demos'][demo_id.to_s] && DSDA.content_present?(merged_demo_folder) && !force
         puts "🟢 Demo #{zip_name} already processed — skipping"
+        puts
         next
       end
 
@@ -311,15 +324,15 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
           sleep sleep_time
           retry
         else
-          warn "❌ Permanently failed to download demo #{zip_name} after #{max_retries} attempts"
+          puts red("❌ Demo download failed: #{zip_name} after #{max_retries} attempts")
           state['failed_demos'][demo_id.to_s] = "download_error:#{e}"
           DSDA.save_state(state, DSDA.state_cache_path)
+          puts
           next
         end
       end
 
       begin
-        puts "📂 Extracting demo → #{temp_demo_folder}"
         FileUtils.rm_rf(temp_demo_folder) if force && Dir.exist?(temp_demo_folder)
         DSDA.extract_with_7z(tmp_zip, temp_demo_folder)
         DSDA.cleanup_unwanted_files(temp_demo_folder)
@@ -340,14 +353,18 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
         # Merge temp folder into the final merged folder
         DSDA.merge_demo_dir(temp_demo_folder, merged_demo_folder)
         puts "📝 Merged demo into #{DSDA.display_path(merged_demo_folder)}"
+        puts green("✅ Demo extraction successful")
+        puts
 
         state['done_demos'][demo_id.to_s] = "ok"
         DSDA.save_state(state, DSDA.state_cache_path)
       rescue => e
-        warn "⚠️ Failed extracting/merging demo #{zip_name}: #{e}"
+        puts red("❌ Demo extraction failed: #{zip_name}")
+        puts "   #{e}"
         state['failed_demos'][demo_id.to_s] = "extract_error:#{e}"
         DSDA.save_state(state, DSDA.state_cache_path)
         # keep tmp_zip for inspection
+        puts
       ensure
         # Always clean up temp folder
         FileUtils.rm_rf(temp_demo_folder) if Dir.exist?(temp_demo_folder)
@@ -396,4 +413,5 @@ end
 
 state['last_sync'] = Time.now.utc.iso8601
 DSDA.save_state(state, DSDA.state_cache_path)
-puts "\n✅ FULL SYNC complete. Wads processed: #{processed}, errors: #{errors}"
+summary = "#{errors.zero? ? '✅' : '❌'} Sync complete. Wads processed: #{processed}, errors: #{errors}"
+puts "\n#{errors.zero? ? green(summary) : red(summary)}"
