@@ -12,6 +12,7 @@ require 'rbconfig'
 require 'io/wait'
 require 'pathname'
 require 'securerandom'
+require 'json'
 require_relative 'support/dsda-common'
 require_relative 'support/dsda-test-prefs'
 include DSDA
