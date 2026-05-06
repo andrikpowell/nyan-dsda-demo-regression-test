@@ -99,12 +99,12 @@ module DSDA
     JSON_MUTEX.synchronize { JSON.generate(obj) }
   end
 
-  def self.save_index(wad_map, per: PER_PAGE, path: index_cache_path)
+  def self.save_index(wad_map, per: PER_PAGE, path: index_cache_path, wad_meta: {})
     INDEX_WRITE_MUTEX.synchronize do
       header = {
         'indexed_at' => Time.now.utc.iso8601,
         'per'        => per,
-        'format'     => 'ndjson-v1'
+        'format'     => 'ndjson-v2'
       }
 
       dir = File.dirname(path)
@@ -114,6 +114,10 @@ module DSDA
       File.open(tmp, "w") do |f|
         # write header (compact JSON)
         f.puts(json_generate_safe(header))
+
+        wad_meta.each do |wad, meta|
+          f.puts(json_generate_safe({ "wad" => wad, "wad_meta" => meta }))
+        end
 
         # write demo lines (compact JSON)
         wad_map.each do |wad, demos|
@@ -465,6 +469,63 @@ module DSDA
 
     workers.each(&:join)
     wad_map
+  end
+
+  def self.fetch_wad_meta_map(wad_slugs, threads: 8, max_retries: 5)
+    wad_meta = {}
+    total = wad_slugs.length
+    completed = 0
+    mutex = Mutex.new
+    work_q = Queue.new
+    wad_slugs.each { |wad| work_q << [wad, 0] }
+
+    workers = Array.new(threads) do
+      Thread.new do
+        loop do
+          begin
+            wad, attempt = work_q.pop(true)
+          rescue ThreadError
+            break
+          end
+
+          begin
+            meta = http_get_json("#{DSDA_API}/wads/#{URI.encode_www_form_component(wad)}")
+          rescue => e
+            if attempt + 1 < max_retries
+              sleep(0.3 * (attempt + 1))
+              work_q << [wad, attempt + 1]
+            else
+              mutex.synchronize do
+                completed += 1
+                puts "  wad metadata #{completed}/#{total} failed: #{wad} (#{e.message})"
+              end
+            end
+            next
+          end
+
+          clean_meta = {
+            "short_name" => meta["short_name"] || wad,
+            "name"       => meta["name"],
+            "iwad"       => meta["iwad"] || "doom2",
+            "id"         => meta["id"],
+            "file"       => meta["file"],
+            "author"     => meta["author"],
+            "authors"    => meta["authors"],
+            "description"=> meta["description"]
+          }
+
+          mutex.synchronize do
+            wad_meta[wad] = clean_meta
+            completed += 1
+            percent = (completed.to_f / [total, 1].max * 100).round(1)
+            puts "  wad metadata #{completed}/#{total} (#{percent}%)" if completed == total || (completed % 25).zero?
+          end
+        end
+      end
+    end
+
+    workers.each(&:join)
+    wad_meta
   end
 
   # For LMP conflict: if same name but different size, generate new name
