@@ -784,6 +784,18 @@ def find_matching_wad(demo_path, wad_files)
     end
 
   folder_hint = safe_str(File.basename(demo_dir)).downcase
+  wad_folder_hint = safe_str(File.basename(File.dirname(demo_dir))).downcase
+  wad_folder_hint_without_prefix = wad_folder_hint.sub(/\A\d+[_-]?/, '')
+  folder_hint_without_prefix = folder_hint.sub(/\A\d+[_-]?/, '')
+
+  folder_hints = [
+    wad_folder_hint,
+    wad_folder_hint_without_prefix,
+    folder_hint,
+    folder_hint_without_prefix
+  ].reject(&:empty?).uniq
+
+  folder_hint_tokens = folder_hints.flat_map { |hint| hint.split(/[_\-]/) }.reject(&:empty?).uniq
 
   wad_info = wad_files.map do |path|
     base = File.basename(path, File.extname(path))
@@ -798,8 +810,9 @@ def find_matching_wad(demo_path, wad_files)
   match =
     (
       primary_wads.find { |w| txt_content.include?(w[:lower]) } ||
-      primary_wads.find { |w| folder_hint.split(/[_\-]/).any? { |token| w[:lower].start_with?(token) || token.start_with?(w[:lower]) } } ||
-      primary_wads.find { |w| folder_hint.include?(w[:lower][0, [w[:lower].size - 1, 4].max]) } ||
+      primary_wads.find { |w| folder_hints.include?(w[:lower]) } ||
+      primary_wads.find { |w| folder_hint_tokens.any? { |token| w[:lower].start_with?(token) || token.start_with?(w[:lower]) } } ||
+      primary_wads.find { |w| folder_hints.any? { |hint| hint.include?(w[:lower][0, [w[:lower].size - 1, 4].max]) } } ||
       primary_wads.first ||
       secondary_wads.find { |w| txt_content.include?(w[:lower]) } ||
       secondary_wads.first
