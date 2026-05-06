@@ -534,6 +534,7 @@ module DSDA
   def self.fast_index_all_pages(total_pages, threads: 5, max_retries: 5, per: PER_PAGE)
     wad_map = Hash.new { |h,k| h[k] = [] }
     mutex   = Mutex.new
+    completed_pages = 0
     work_q  = Queue.new
     (1..total_pages).each { |p| work_q << [p, 0] }   # [page, attempts]
 
@@ -568,9 +569,11 @@ module DSDA
 
           mutex.synchronize do
             demos.each { |d| wad_map[d["wad"].to_s] << d }
+            completed_pages += 1
+            percent = (completed_pages.to_f / [total_pages, 1].max * 100)
+            percent_str = percent.to_i == percent ? percent.to_i.to_s : percent.round(1).to_s
+            puts "  page #{page} ✓ #{completed_pages}/#{total_pages} (#{demos.length} demos - #{percent_str}%)"
           end
-
-          puts "  page #{page} ✓ (#{demos.length})"
         end
       end
     end
