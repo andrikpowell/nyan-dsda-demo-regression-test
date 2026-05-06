@@ -12,7 +12,9 @@ require 'rbconfig'
 require 'io/wait'
 require 'pathname'
 require 'securerandom'
+require_relative 'support/dsda-common'
 require_relative 'support/dsda-test-prefs'
+include DSDA
 
 def print_help
   puts <<~HELP
@@ -72,48 +74,6 @@ end
 if old_exe_path_override
   Object.send(:remove_const, :OLD_EXE_PATH)
   OLD_EXE_PATH = old_exe_path_override
-end
-
-# ============================================================
-# Color helpers
-# ============================================================
-
-def color(text, code) "\e[#{code}m#{text}\e[0m" end
-def green(text) color(text, 32) end
-def yellow(text) color(text, 33) end
-def red(text) color(text, 31) end
-def orange(text) "\e[38;5;208m#{text}\e[0m" end   # 208 is a bright orange in many terminals
-
-def rainbow(str)
-  (0...str.length).map do |i|
-    # hue range from red (0°) to light blue (~200°)
-    hue = ((i + 0).to_f / 70) * 200
-    rgb = hsv_to_rgb(hue, 1.0, 1.0)
-    color_code = rgb_to_ansi256(*rgb)
-    "\e[38;5;#{color_code}m#{str[i]}\e[0m"
-  end.join
-end
-
-def hsv_to_rgb(h, s, v)
-  c = v * s
-  x = c * (1 - ((h / 60.0) % 2 - 1).abs)
-  m = v - c
-
-  r, g, b =
-    case h
-    when 0...60   then [c, x, 0]
-    when 60...120 then [x, c, 0]
-    when 120...180 then [0, c, x]
-    when 180...240 then [0, x, c]
-    else [c, 0, x]
-    end
-
-  [((r + m) * 255).round, ((g + m) * 255).round, ((b + m) * 255).round]
-end
-
-def rgb_to_ansi256(r, g, b)
-  # approximate RGB to 256-color palette
-  16 + (36 * (r / 51)) + (6 * (g / 51)) + (b / 51)
 end
 
 # ============================================================
@@ -325,21 +285,6 @@ def sanitize_cmdline(cmd)
   cmd.gsub(/\s+/, " ").strip
 end
 
-def format_duration(seconds)
-  hours,   rem  = seconds.divmod(3600)
-  minutes, secs = rem.divmod(60)
-
-  if hours >= 1
-    # Format: H:MM:SS  (e.g. 1:23:08)
-    "#{hours.to_i}:#{minutes.to_i.to_s.rjust(2,'0')}:#{secs.round.to_i.to_s.rjust(2,'0')}"
-  elsif minutes >= 1
-    # Format: M:SS  (e.g. 12:07)
-    "#{minutes.to_i}:#{secs.round.to_i.to_s.rjust(2,'0')}"
-  else
-    # Format: X.X seconds
-    "#{secs.round(1)} seconds"
-  end
-end
 
 def detect_demo_engine_from_log(log_output)
   if log_output =~ /G_ReadDemoHeader:\s+Unknown demo format\s+(\d+)/i
