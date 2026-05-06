@@ -360,12 +360,19 @@ def log_line(log, text)
 end
 
 # ============================================================
-# CSV BACKUP: creates timestamped backups in spec/data-export/BU/
+# CSV BACKUP: creates timestamped backups in per-file backup folders.
 # ============================================================
 def backup_csv(file_path)
   return unless File.exist?(file_path)
 
-  bu_dir = File.join(File.dirname(file_path), "BU")
+  backup_folder =
+    case File.basename(file_path).downcase
+    when "results.csv"  then "BU-results"
+    when "failures.csv" then "BU-failures"
+    else "BU"
+    end
+
+  bu_dir = File.join(File.dirname(file_path), backup_folder)
   FileUtils.mkdir_p(bu_dir)
 
   timestamp = Time.now.strftime("%Y%m%d-%H%M%S")
