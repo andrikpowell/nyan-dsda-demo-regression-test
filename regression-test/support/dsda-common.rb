@@ -22,6 +22,10 @@ module DSDA
     File.expand_path('cache/dsda_demo_index.json', base_dir)
   end
 
+  def self.sync_warning_path(base_dir = __dir__ + '/..')
+    File.expand_path('dsda-sync-warning.txt', base_dir)
+  end
+
   def self.demo_root_path(base_dir = __dir__ + '/..')
     File.expand_path('support/demos', base_dir)
   end
@@ -337,8 +341,43 @@ module DSDA
     FileUtils.mkdir_p(dest)
     cmd = "#{SEVEN_ZIP_BIN} x \"#{zip_path}\" -o\"#{dest}\" -y >7z.log 2>&1"
     puts "📂 Extracting #{File.basename(zip_path)} → #{display_path(dest)} (via 7-Zip)"
-    raise "Extraction failed for #{zip_path}" unless system(cmd)
+    unless system(cmd)
+      extracted_count = extracted_file_count(dest)
+      if extracted_count.positive?
+        puts "⚠️  7-Zip reported errors, but #{extracted_count} file#{'s' if extracted_count != 1} were extracted; keeping them."
+        append_sync_warning(zip_path, dest, extracted_count)
+        return :partial
+      end
+
+      raise "Extraction failed for #{zip_path}"
+    end
     puts "🧰 Extracted successfully."
+    :ok
+  end
+
+  def self.extracted_file_count(dir)
+    Dir.glob(File.join(dir, '**', '*'), File::FNM_DOTMATCH).count { |path| File.file?(path) }
+  end
+
+  def self.append_sync_warning(zip_path, dest, extracted_count, path = sync_warning_path)
+    FileUtils.mkdir_p(File.dirname(path))
+    log = File.exist?('7z.log') ? File.read('7z.log', mode: 'rb').encode('UTF-8', invalid: :replace, undef: :replace) : '(7z.log not found)'
+
+    File.open(path, 'a') do |f|
+      f.puts "----------------------------------------------------------------------"
+      f.puts "Time: #{Time.now.utc.iso8601}"
+      f.puts "ZIP: #{zip_path}"
+      f.puts "Destination: #{dest}"
+      f.puts "Extracted files: #{extracted_count}"
+      f.puts
+      f.puts "7-Zip returned an error, but files were extracted. Sync kept the extracted files and continued."
+      f.puts
+      f.puts "[7z.log]"
+      f.puts log
+      f.puts
+    end
+
+    puts "📝 Sync warning logged to #{path}"
   end
 
   def self.cleanup_unwanted_files(dir)
