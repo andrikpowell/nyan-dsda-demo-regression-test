@@ -35,13 +35,7 @@ EXOTIC_IWADS  = %w[heretic hexen chex].freeze
 KNOWN_IWADS   = (PRIMARY_IWADS + EXOTIC_IWADS).freeze
 
 state = DSDA.load_state(DSDA.state_cache_path)
-
-# retry-only path
-if options[:retry_failed]
-  DSDA.retry_failed_demos(state: state, force: options[:force])
-  DSDA.save_state(state)
-  exit
-end
+state['failed_wads'] ||= {}
 
 # load index
 index = DSDA.load_index(DSDA.index_cache_path)
@@ -387,7 +381,23 @@ end
 
 raw_query = ARGV[0]&.strip
 targets =
-  select_sync_targets(raw_query, index)
+  if options[:retry_failed]
+    failed_wads = state.fetch('failed_wads', {})
+    failed_demos = state.fetch('failed_demos', {})
+
+    if failed_wads.empty? && failed_demos.empty?
+      puts "No failed WADs or demos to retry."
+      exit 0
+    end
+
+    if failed_wads.any?
+      puts "🔁 Retrying #{failed_wads.size} failed WAD#{'s' if failed_wads.size != 1}..."
+    end
+
+    failed_wads.keys.map { |wad_slug| { wad: wad_slug } }
+  else
+    select_sync_targets(raw_query, index)
+  end
 processed = 0
 errors = 0
 sync_start = Time.now
@@ -417,6 +427,7 @@ targets.each_with_index do |target, target_index|
       skip_demos: options[:skip_demos],
       wad_meta: target[:meta]
     )
+    state['failed_wads'].delete(wad_short)
   rescue Interrupt
     puts "\n✋ Interrupted by user. State saved."
     DSDA.save_state(state, DSDA.state_cache_path)
@@ -424,8 +435,17 @@ targets.each_with_index do |target, target_index|
   rescue => e
     errors += 1
     puts "⚠️  Skipping wad #{wad_short} due to error: #{e.message}"
+    state['failed_wads'][wad_short] = {
+      'error' => e.message,
+      'updated_at' => Time.now.utc.iso8601
+    }
+    DSDA.save_state(state, DSDA.state_cache_path)
   end
   processed += 1
+end
+
+if options[:retry_failed] && state.fetch('failed_demos', {}).any?
+  DSDA.retry_failed_demos(state: state, force: options[:force])
 end
 
 state['last_sync'] = Time.now.utc.iso8601

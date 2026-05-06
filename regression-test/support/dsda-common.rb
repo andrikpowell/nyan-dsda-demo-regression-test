@@ -397,11 +397,13 @@ module DSDA
 
   # state helpers
   def self.load_state(path = state_cache_path)
-    return { "last_sync" => nil, "done_wads" => {}, "done_demos" => {}, "failed_demos" => {}, "wad_meta" => {} } unless File.exist?(path)
+    default = { "last_sync" => nil, "done_wads" => {}, "done_demos" => {}, "failed_wads" => {}, "failed_demos" => {}, "wad_meta" => {} }
+    return default unless File.exist?(path)
+
     begin
-      json_parse_safe(File.read(path))
+      default.merge(json_parse_safe(File.read(path)))
     rescue => _
-      { "last_sync" => nil, "done_wads" => {}, "done_demos" => {}, "failed_demos" => {}, "wad_meta" => {} }
+      default
     end
   end
 
