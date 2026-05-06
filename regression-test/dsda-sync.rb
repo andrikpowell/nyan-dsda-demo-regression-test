@@ -384,6 +384,7 @@ targets =
   select_sync_targets(raw_query, index)
 processed = 0
 errors = 0
+sync_start = Time.now
 
 puts "🎯 Sync targets: #{targets.size}"
 
@@ -401,7 +402,7 @@ targets.each_with_index do |target, target_index|
     puts orange("\n----------------------------------------------------------------------")
     puts orange("🟠 Sync progress: #{remaining} WAD#{'s' if remaining != 1} left (#{percent_str}%)")
     puts "\n────────────────────────────────────────"
-    puts "Syncing wad: #{wad_short} (#{demos.length} demos)"
+    puts "Syncing wad: #{wad_short} (#{demos.length} indexed demos)"
     sync_single_wad(
       wad_short,
       state: state,
@@ -425,3 +426,4 @@ state['last_sync'] = Time.now.utc.iso8601
 DSDA.save_state(state, DSDA.state_cache_path)
 summary = "#{errors.zero? ? '✅' : '❌'} Sync complete. Wads processed: #{processed}, errors: #{errors}"
 puts "\n#{errors.zero? ? green(summary) : red(summary)}"
+puts "⏱️ Time elapsed: #{format_duration(Time.now - sync_start)}"
