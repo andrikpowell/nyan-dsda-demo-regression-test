@@ -385,11 +385,21 @@ targets =
 processed = 0
 errors = 0
 
-targets.each do |target|
+puts "🎯 Sync targets: #{targets.size}"
+
+total_targets = targets.size
+
+targets.each_with_index do |target, target_index|
   wad_short = target[:wad]
   demos = index['wad_map'][wad_short] || []
+  completed = target_index
+  percent = (completed.to_f / [total_targets, 1].max * 100)
+  percent_str = percent.to_i == percent ? percent.to_i.to_s : percent.round(1).to_s
+  remaining = total_targets - completed
 
   begin
+    puts orange("\n----------------------------------------------------------------------")
+    puts orange("🟠 Sync progress: #{remaining} WAD#{'s' if remaining != 1} left (#{percent_str}%)")
     puts "\n────────────────────────────────────────"
     puts "Syncing wad: #{wad_short} (#{demos.length} demos)"
     sync_single_wad(
