@@ -48,7 +48,7 @@ overrun_missedbackside_emulate   1
    - `IwadOverride` - rare, but sometimes the demo may be for the wrong iwad. (example: `doom2.wad`)
    - `FileOverride` - relative to the current wad folder; Each file should be separated via `,`; For external, commerical, or Master Levels, use the aliases `EX/, CM/, ML/`; The alias `demo_dir/` corresponds to the current demo folder; note that the order of the wads is the load order and will override the current `-file` arguments (example: `EX/nerve.wad, cool.wad, fix/cool.deh, demo_dir/patch.deh`).
    - `ExtraArgs` - includes any extra arguments you may need to get the demo to sync. Note that all the arguments should be surrounded by double quotes (example: `"-complevel 5 -nodeh"`)
-7) If you can't get the demo to sync, than you may need to `Skip` it. There are many reasons for skipping demos, but by default the demo is still ran for regression checking, but is "skipped" in regards to marking against the test. There are cases where a demo can cause a freeze, crash, or simply takes too long to run... This takes the `Reason` column into account, which is where we specify the reason for the skip. These reasons will not run the demo at all and truly skip it: `crash`, `freeze`, `unpredictable`, `duplicate`, `ignore`, `wrong wad`, `wrong iwad`, `too long`.
+7) If you can't get the demo to sync, than you may need to `Skip` it. There are many reasons for skipping demos, but by default the demo is still ran for regression checking, but is "skipped" in regards to marking against the test. There are cases where a demo can cause a freeze, crash, or simply takes too long to run... This takes the `Reason` column into account, which is where we specify the reason for the skip. These reasons will not run the demo at all and truly skip it: `crash`, `freeze`, `unpredictable`, `duplicate`, `ignore`, `wrong wad`, `wrong iwad`, `too long`, `bad wad`.
 8) Once you fill out the fields make sure to also fill out the `Action` column with `Override` or `Skip`
 9) Now copy the "fixed" row from `Failures.csv` and paste it into `Overrides.csv`. All CSVs follow the same column structure, so they are easy to transfer over.
 10) Now in order to see if you've fixed those demos, you can re-run `dsda-reg-test.rb` with `--failed-only` and it'll only re-test the failed demos... If specific demos then pass, they will be updated in `Overrides.csv`.
@@ -68,7 +68,7 @@ overrun_missedbackside_emulate   1
   - `--force` Force overwrite extracted content
   - `--skip-wads` Don't download/extract wad zips
   - `--skip-demos` Don't download/extract demo zips
-  - `--retry-failed` Retry only failed demos
+  - `--failed-only` / `--retry-failed` Retry only failed demos
   - `--refresh-index` Ignore cached index and build a new one *(recommended: run dsda-index.rb)*
   - `--help` Show commands
 - `dsda-reg-test.rb`
@@ -83,7 +83,7 @@ overrun_missedbackside_emulate   1
     - `ruby dsda-reg-test.rb av`
     - `ruby dsda-reg-test.rb av/av01-123` 
   - Options:
-    - `--failed-only` run only the demos that failed during the last test (see `regression-test/data-export/failures.csv`).
+    - `--failed-only` / `--retry-failed` run only the demos that failed during the last test (see `regression-test/data-export/failures.csv`).
     - `--fill-demo-folder` Fill missing DemoFolder values in `overrides.csv` and exit.
     - `--set-exe-path <PATH>` Override the new engine executable for this run.
     - `--set-old-exe-path <PATH>` Override the old/reference engine executable for this run.
