@@ -2546,6 +2546,7 @@ def try_save_all_csvs(sorted, failures)
   # If nothing is locked → perform cleanup *and then exit*
   if locked.empty?
     if failures.empty? && File.exist?(FAILURES_OUTPUT)
+      backup_csv(FAILURES_OUTPUT)
       FileUtils.rm_f(FAILURES_OUTPUT)
       puts green("🧹 No failures detected — removed #{FAILURES_OUTPUT}")
     end
