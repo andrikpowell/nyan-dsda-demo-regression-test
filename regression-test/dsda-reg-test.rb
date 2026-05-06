@@ -1901,6 +1901,7 @@ SKIP_IMMEDIATE = [
   "unsupported",
   "wrong iwad",
   "wrong wad",
+  "bad wad",
   "too long"
 ].map { |s| s.downcase }
 
