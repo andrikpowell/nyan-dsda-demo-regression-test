@@ -24,6 +24,7 @@ def print_help
 
     Selectors:
       ruby dsda-reg-test.rb
+      ruby dsda-reg-test.rb --all
       ruby dsda-reg-test.rb doom2
       ruby dsda-reg-test.rb doom2/av
       ruby dsda-reg-test.rb doom2/av/av01-123
@@ -31,7 +32,10 @@ def print_help
       ruby dsda-reg-test.rb av/av01-123
 
     Options:
-      --failed-only
+      --all
+          Run all IWADs, including Heretic, Hexen, and Chex.
+
+      --retry-failed, --failed-only
           Re-run demos listed in failures.csv only.
 
       --fill-demo-folder
@@ -66,6 +70,8 @@ end
 
 exe_path_override = consume_path_option!(%w[--set-exe-path])
 old_exe_path_override = consume_path_option!(%w[--set-old-exe-path])
+
+RUN_ALL_IWADS = ARGV.delete("--all") ? true : false
 
 if exe_path_override
   Object.send(:remove_const, :EXE_PATH)
@@ -1339,10 +1345,12 @@ def select_demo_folders(raw_query)
   demo_folders = []
 
   # -----------------------------------------
-  # CASE 0: No argument → run everything
+  # CASE 0: No argument → run primary IWADs; --all includes exotic IWADs too
   # -----------------------------------------
   if raw_query.nil?
-    PRIMARY_IWADS.each do |iwad|
+    selected_iwads = RUN_ALL_IWADS ? (PRIMARY_IWADS + EXOTIC_IWADS) : PRIMARY_IWADS
+
+    selected_iwads.each do |iwad|
       iwad_path = resolve_path_ci(DEMOS_ROOT, iwad)
       next unless iwad_path && Dir.exist?(iwad_path)
 
@@ -1351,7 +1359,8 @@ def select_demo_folders(raw_query)
       end
     end
 
-    puts "🎯 No argument → running all demos (#{demo_folders.size})"
+    scope = RUN_ALL_IWADS ? "all IWADs" : "primary IWADs"
+    puts "🎯 No argument → running #{scope} (#{demo_folders.size})"
     return demo_folders
   end
 
