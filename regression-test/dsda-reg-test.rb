@@ -1768,8 +1768,10 @@ def prepare_demo_info(env)
                            override[:action] == "override" &&
                            override[:file_override] &&
                            !override[:file_override].empty?
+  iwad_only_override = explicit_file_override &&
+                       override[:file_override].any? { |v| v.to_s.strip.upcase == "IWAD_ONLY" }
 
-  unless explicit_file_override
+  unless explicit_file_override || iwad_only_override
     auto_override_list = auto_file_override_entries(env)
     if auto_override_list.any?
       final_wads = auto_override_list.map do |entry|
@@ -1788,8 +1790,14 @@ def prepare_demo_info(env)
       override_iwad_flag = true
     end
 
+    if iwad_only_override
+      final_wads = []
+      final_dehs = []
+      final_override_files = []
+    end
+
     # File overrides
-    if override[:file_override] && !override[:file_override].empty?
+    if explicit_file_override && !iwad_only_override
       override_list = override[:file_override]
 
       # User supplied the full list → we trust it exactly
@@ -1815,13 +1823,6 @@ def prepare_demo_info(env)
       is_subfolder = rel.include?('/') || rel.include?('\\')
       [is_subfolder ? 0 : 1, rel.downcase]
     end
-  end
-
-  # FINAL step — enforce IWAD_ONLY if requested
-  if override && override[:file_override]&.any? { |v| v.strip.upcase == "IWAD_ONLY" }
-    final_wads = []
-    final_dehs = []
-    final_override_files = []
   end
 
   # Output final execution-ready config
