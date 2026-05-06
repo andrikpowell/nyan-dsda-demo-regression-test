@@ -93,10 +93,19 @@ end
 
 def strip_manual_quotes(v)
   return nil if v.nil?
-  s = v.strip
-  if s.start_with?('"') && s.end_with?('"')
-    return s[1..-2]      # remove quotes
+  s = v.to_s.strip
+
+  # Excel-friendly CSV values can come back as literal quotes ("01fava")
+  # or as formulas such as ="01fava". Runtime matching should see 01fava.
+  if s.start_with?("=")
+    formula_value = s[1..].to_s.strip
+    s = formula_value if formula_value.start_with?('"') && formula_value.end_with?('"')
   end
+
+  while s.length >= 2 && s.start_with?('"') && s.end_with?('"')
+    s = s[1...-1].strip
+  end
+
   s
 end
 
@@ -458,9 +467,9 @@ def load_failures_list
   failures = {}
 
   rows.each do |row|
-    iwadfolder = row["IwadFolder"]&.strip
-    wadfolder  = row["WadFolder"]&.strip
-    demofile   = row["DemoFile"]&.strip
+    iwadfolder = strip_manual_quotes(row["IwadFolder"])
+    wadfolder  = strip_manual_quotes(row["WadFolder"])
+    demofile   = strip_manual_quotes(row["DemoFile"])
     next if iwadfolder.nil? || wadfolder.nil? || demofile.nil?
 
     key = [iwadfolder.downcase, wadfolder.downcase]
@@ -489,9 +498,9 @@ if ARGV.include?("--fill-demo-folder")
   rows.each do |row|
     next if row["DemoFolder"] && !row["DemoFolder"].strip.empty?
 
-    iwad = row["IwadFolder"]&.strip
-    wad  = row["WadFolder"]&.strip
-    lmp  = row["DemoFile"]&.strip
+    iwad = strip_manual_quotes(row["IwadFolder"])
+    wad  = strip_manual_quotes(row["WadFolder"])
+    lmp  = strip_manual_quotes(row["DemoFile"])
 
     demo_root = iwad && wad ? resolve_path_ci(DEMOS_ROOT, File.join(iwad, wad)) : nil
     matches =
@@ -667,7 +676,7 @@ def load_demo_overrides
     iwadfolder = strip_manual_quotes(fields["iwadfolder"])
     wadfolder  = strip_manual_quotes(fields["wadfolder"])
     demofolder = strip_manual_quotes(fields["demofolder"])
-    demofile   = fields["demofile"]&.strip
+    demofile   = strip_manual_quotes(fields["demofile"])
 
     action     = fields["action"]&.strip&.downcase
 
@@ -688,14 +697,14 @@ def load_demo_overrides
     comments       = fields["comments"]&.strip
 
     # OPTIONAL: IWAD Override (string or empty)
-    iwad_override = fields["iwadoverride"]&.strip
+    iwad_override = strip_manual_quotes(fields["iwadoverride"])
     iwad_override = nil if iwad_override.nil? || iwad_override.empty?
 
     # OPTIONAL: FileOverride (comma list)
     file_override_raw = fields["fileoverride"]&.strip
     file_override =
       if file_override_raw && !file_override_raw.empty?
-        file_override_raw.split(",").map { |v| v.strip }.reject(&:empty?)
+        file_override_raw.split(",").map { |v| strip_manual_quotes(v) }.reject(&:empty?)
       else
         []   # Always return an array
       end
