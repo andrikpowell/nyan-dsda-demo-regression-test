@@ -37,10 +37,10 @@ def print_help
       --fill-demo-folder
           Fill missing DemoFolder values in overrides.csv and exit.
 
-      --set_exe_path PATH, --set-exe-path PATH
+      --set-exe-path PATH
           Override the new engine executable for this run.
 
-      --set_old_exe_path PATH, --set-old-exe-path PATH
+      --set-old-exe-path PATH
           Override the old/reference engine executable for this run.
 
       -h, --help
@@ -64,8 +64,8 @@ def consume_path_option!(names)
   File.expand_path(value)
 end
 
-exe_path_override = consume_path_option!(%w[--set_exe_path --set-exe-path])
-old_exe_path_override = consume_path_option!(%w[--set_old_exe_path --set-old-exe-path])
+exe_path_override = consume_path_option!(%w[--set-exe-path])
+old_exe_path_override = consume_path_option!(%w[--set-old-exe-path])
 
 if exe_path_override
   Object.send(:remove_const, :EXE_PATH)
