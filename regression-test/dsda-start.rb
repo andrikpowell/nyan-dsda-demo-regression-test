@@ -221,6 +221,7 @@ def handle_command(words, interactive: false)
   run_program(command, words)
   press_enter_to_continue if interactive && help_args?(words)
   post_run_prompts(command, words) if interactive
+  press_enter_to_continue if interactive && command == 'test' && !help_args?(words)
   :continue
 end
 
