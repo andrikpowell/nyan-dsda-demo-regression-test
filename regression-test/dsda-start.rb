@@ -16,7 +16,7 @@ SCRIPT_DIR = __dir__
 COMMANDS = {
   'index' => File.join(SCRIPT_DIR, 'dsda-index.rb'),
   'sync'  => File.join(SCRIPT_DIR, 'dsda-sync.rb'),
-  'test'  => File.join(SCRIPT_DIR, 'dsda-reg-test.rb')
+  'test'  => File.join(SCRIPT_DIR, 'dsda-test.rb')
 }.freeze
 
 def load_last_sync

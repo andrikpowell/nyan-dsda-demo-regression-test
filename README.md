@@ -36,7 +36,7 @@ overrun_missedbackside_emulate   1
 1) Enter the `regression-test` directory
 2) Run `ruby dsda-index.rb` to build the index of dsda demos.
 3) Once index is complete, run `ruby dsda-sync.rb` to download all demos.
-4) Run `ruby dsda-reg-test.rb` to run the entire regression test.
+4) Run `ruby dsda-test.rb` to run the entire regression test.
 5) When the test completes, `results.csv` and `failures.csv` (if there are failures) will be created in `regression-test/data-export/`.
 
 # Fixing Failures / Editing Overrides
@@ -51,7 +51,7 @@ overrun_missedbackside_emulate   1
 7) If you can't get the demo to sync, than you may need to `Skip` it. There are many reasons for skipping demos, but by default the demo is still ran for regression checking, but is "skipped" in regards to marking against the test. There are cases where a demo can cause a freeze, crash, or simply takes too long to run... This takes the `Reason` column into account, which is where we specify the reason for the skip. These reasons will not run the demo at all and truly skip it: `crash`, `freeze`, `unpredictable`, `duplicate`, `ignore`, `wrong wad`, `wrong iwad`, `too long`, `bad wad`.
 8) Once you fill out the fields make sure to also fill out the `Action` column with `Override` or `Skip`
 9) Now copy the "fixed" row from `Failures.csv` and paste it into `Overrides.csv`. All CSVs follow the same column structure, so they are easy to transfer over.
-10) Now in order to see if you've fixed those demos, you can re-run `dsda-reg-test.rb` with `--failed-only` and it'll only re-test the failed demos... If specific demos then pass, they will be updated in `Overrides.csv`.
+10) Now in order to see if you've fixed those demos, you can re-run `dsda-test.rb` with `--failed-only` and it'll only re-test the failed demos... If specific demos then pass, they will be updated in `Overrides.csv`.
 11) `Failures.csv` will be deleted if all the failures have been resolved.
 
 # Re-indexing / Re-syncing
@@ -71,17 +71,17 @@ overrun_missedbackside_emulate   1
   - `--failed-only` / `--retry-failed` Retry only failed demos
   - `--refresh-index` Ignore cached index and build a new one *(recommended: run dsda-index.rb)*
   - `--help` Show commands
-- `dsda-reg-test.rb`
+- `dsda-test.rb`
   - Running the test without any options will run the entire test.
   - Usage:
-    - `ruby dsda-reg-test.rb [IWAD[/WAD[/DEMO_FOLDER]]] [options]`
+    - `ruby dsda-test.rb [IWAD[/WAD[/DEMO_FOLDER]]] [options]`
   - Examples:
-    - `ruby dsda-reg-test.rb`
-    - `ruby dsda-reg-test.rb doom2`
-    - `ruby dsda-reg-test.rb doom2/av`
-    - `ruby dsda-reg-test.rb doom2/av/av01-123`
-    - `ruby dsda-reg-test.rb av`
-    - `ruby dsda-reg-test.rb av/av01-123` 
+    - `ruby dsda-test.rb`
+    - `ruby dsda-test.rb doom2`
+    - `ruby dsda-test.rb doom2/av`
+    - `ruby dsda-test.rb doom2/av/av01-123`
+    - `ruby dsda-test.rb av`
+    - `ruby dsda-test.rb av/av01-123` 
   - Options:
     - `--failed-only` / `--retry-failed` run only the demos that failed during the last test (see `regression-test/data-export/failures.csv`).
     - `--fill-demo-folder` Fill missing DemoFolder values in `overrides.csv` and exit.

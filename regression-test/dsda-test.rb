@@ -20,16 +20,16 @@ include DSDA
 def print_help
   puts <<~HELP
     Usage:
-      ruby dsda-reg-test.rb [IWAD[/WAD[/DEMO_FOLDER]]] [options]
+      ruby dsda-test.rb [IWAD[/WAD[/DEMO_FOLDER]]] [options]
 
     Selectors:
-      ruby dsda-reg-test.rb
-      ruby dsda-reg-test.rb --all
-      ruby dsda-reg-test.rb doom2
-      ruby dsda-reg-test.rb doom2/av
-      ruby dsda-reg-test.rb doom2/av/av01-123
-      ruby dsda-reg-test.rb av
-      ruby dsda-reg-test.rb av/av01-123
+      ruby dsda-test.rb
+      ruby dsda-test.rb --all
+      ruby dsda-test.rb doom2
+      ruby dsda-test.rb doom2/av
+      ruby dsda-test.rb doom2/av/av01-123
+      ruby dsda-test.rb av
+      ruby dsda-test.rb av/av01-123
 
     Options:
       --all
