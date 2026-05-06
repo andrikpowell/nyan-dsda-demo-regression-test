@@ -37,4 +37,4 @@ end
 DSDA.save_index(wad_map, per: options[:per], wad_meta: wad_meta)
 elapsed = Time.now - start
 puts "💾 Saved index cache to #{DSDA.index_cache_path}"
-puts "✅ Indexing complete — wads: #{wad_map.keys.length}, wad metadata: #{wad_meta.length}, time: #{elapsed.round(1)}s"
+puts "✅ Indexing complete — wads: #{wad_map.keys.length}, wad metadata: #{wad_meta.length}, time: #{format_duration(elapsed)}"
