@@ -54,6 +54,7 @@ module DSDA
 
   JSON_MUTEX = Mutex.new
   INDEX_WRITE_MUTEX = Mutex.new
+  HELP_FLAGS = %w[-h --h -help --help].freeze
   FAILED_FLAGS = %w[--retry-failed --failed-only].freeze
 
   # ============================================================
@@ -118,11 +119,19 @@ module DSDA
     16 + (36 * (r / 51)) + (6 * (g / 51)) + (b / 51)
   end
 
+  def help_flag?(arg)
+    HELP_FLAGS.include?(arg.to_s.downcase)
+  end
+
+  def normalize_help_flags!(args)
+    args.map! { |arg| help_flag?(arg) ? '--help' : arg }
+  end
+
   def failed_flag?(arg)
     FAILED_FLAGS.include?(arg.to_s.downcase)
   end
 
-  module_function :format_duration, :color, :green, :yellow, :red, :orange, :rainbow, :hsv_to_rgb, :rgb_to_ansi256, :failed_flag?
+  module_function :format_duration, :color, :green, :yellow, :red, :orange, :rainbow, :hsv_to_rgb, :rgb_to_ansi256, :help_flag?, :normalize_help_flags!
 
   def self.json_generate_safe(obj)
     JSON_MUTEX.synchronize { JSON.generate(obj) }

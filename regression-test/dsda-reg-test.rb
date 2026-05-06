@@ -47,12 +47,12 @@ def print_help
       --set-old-exe-path PATH
           Override the old/reference engine executable for this run.
 
-      -h, --help
+      -h, --h, -help, --help
           Show this help.
   HELP
 end
 
-if ARGV.delete("-h") || ARGV.delete("--help")
+if ARGV.any? { |arg| DSDA.help_flag?(arg) }
   print_help
   exit 0
 end

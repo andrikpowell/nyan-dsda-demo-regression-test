@@ -20,14 +20,25 @@ options = {
   refresh_index: false,
   retry_failed: false
 }
+DSDA.normalize_help_flags!(ARGV)
 
 opt = OptionParser.new
+opt.banner = <<~BANNER
+  Usage:
+    ruby dsda-sync.rb [IWAD[/WAD] | WAD] [options]
+
+  Examples:
+    ruby dsda-sync.rb doom
+    ruby dsda-sync.rb doom/01fava
+    ruby dsda-sync.rb 01fava
+
+BANNER
 opt.on("--force", "Force overwrite extracted content") { options[:force] = true }
 opt.on("--skip-wads", "Don't download/extract wad zips") { options[:skip_wads] = true }
 opt.on("--skip-demos", "Don't download/extract demo zips") { options[:skip_demos] = true }
 opt.on("--refresh-index", "Ignore cached index and build a new one (recommended: run dsda-index.rb)") { options[:refresh_index] = true }
 opt.on(*DSDA::FAILED_FLAGS, "Retry failed WADs and demos") { options[:retry_failed] = true }
-opt.on("-h","--help"){ puts opt; exit }
+opt.on("-h", "--h", "--help") { puts opt; exit }
 opt.parse!(ARGV)
 
 PRIMARY_IWADS = %w[doom2 doom plutonia tnt].freeze
