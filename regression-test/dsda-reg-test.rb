@@ -301,6 +301,15 @@ def sanitize_cmdline(cmd)
   cmd.gsub(/\s+/, " ").strip
 end
 
+def wait_for_file(path, timeout_secs: 2.0, interval_secs: 0.05)
+  deadline = Time.now + timeout_secs
+
+  until File.exist?(path) || Time.now >= deadline
+    sleep interval_secs
+  end
+
+  File.exist?(path)
+end
 
 def detect_demo_engine_from_log(log_output)
   if log_output =~ /G_ReadDemoHeader:\s+Unknown demo format\s+(\d+)/i
@@ -994,6 +1003,64 @@ def add_path(cmd, displaycmd, path)
   displaycmd << q(path)  # quoted for display
 end
 
+def execute_demo_process(cmd:, worker_dir:, exe:, log:)
+  output = String.new(encoding: Encoding::BINARY)
+  timed_out = false
+  status = nil
+  fail_reason = nil
+  tmp_path = nil
+  pid = nil
+
+  begin
+    # SAFETY CHECK - prevent accidental overwrite of EXE output.
+    if worker_dir.start_with?(BUILD_PATH)
+      raise "CRITICAL ERROR: worker_dir resolved to build folder: #{worker_dir}"
+    end
+
+    # Create temp output file inside worker_dir.
+    tmp_path = File.join(worker_dir, "demotest_#{exe}_output_#{Process.pid}_#{rand(100_000_000)}.log")
+    FileUtils.touch(tmp_path)
+
+    # Spawn the engine with worker_dir as cwd.
+    pid = Process.spawn(*cmd, chdir: worker_dir, out: tmp_path, err: tmp_path)
+
+    begin
+      Timeout.timeout(TIMEOUT_SECS) do
+        Process.wait(pid)
+        status = $?
+      end
+    rescue Timeout::Error
+      timed_out = true
+      fail_reason = "timeout after #{TIMEOUT_SECS}s"
+      thread_log(log) { puts red("⏱️  Demo timed out after #{TIMEOUT_SECS}s") }
+
+      begin
+        Process.kill('TERM', pid) rescue nil
+        sleep 0.5
+        Process.kill('KILL', pid) rescue nil
+      rescue Errno::ESRCH
+      end
+    end
+  rescue => e
+    thread_log(log) { puts "[Error executing demo-test: #{e.message}]" }
+    fail_reason = e.message
+  ensure
+    # Read the last 2KB of engine output, then remove the temp log.
+    if tmp_path && File.exist?(tmp_path)
+      begin
+        File.open(tmp_path, "rb") do |f|
+          f.seek(-2048, IO::SEEK_END) rescue nil
+          output = f.read || ""
+        end
+      ensure
+        FileUtils.rm_f(tmp_path) rescue nil
+      end
+    end
+  end
+
+  [status, timed_out, fail_reason, output]
+end
+
 def run_demo_with_exe(
   exe:,
   iwad:,
@@ -1117,70 +1184,33 @@ def run_demo_with_exe(
   thread_log(log) { puts "\n🧠 Running command:\n   #{displaycmd.join(' ')}" }
   play_cmd = sanitize_cmdline(displaycmd.join(" "))
 
-  output = String.new(encoding: Encoding::BINARY)
-
-  timed_out = false
   result = nil
-  fail_reason = nil
   actual_time = nil
   error_hint = nil
 
-  begin
-    # --------------------------------------------------
-    # Create temp output file inside worker_dir
-    # --------------------------------------------------
+  status, timed_out, fail_reason, output = execute_demo_process(
+    cmd: cmd,
+    worker_dir: worker_dir,
+    exe: exe,
+    log: log
+  )
 
-    # SAFETY CHECK — prevent accidental overwrite of EXE
-    if worker_dir.start_with?(BUILD_PATH)
-      raise "CRITICAL ERROR: worker_dir resolved to build folder: #{worker_dir}"
+  if !timed_out && status&.exitstatus == 0 && !wait_for_file(levelstat_path)
+    thread_log(log) do
+      puts yellow("⚠️  levelstat.txt missing after clean exit; retrying once to avoid a false positive")
     end
 
-    tmp_path = File.join(worker_dir, "demotest_#{exe}_output_#{Process.pid}_#{rand(100_000_000)}.log")
-    FileUtils.touch(tmp_path)
+    FileUtils.rm_f(analysis_path)
+    FileUtils.rm_f(levelstat_path)
 
-    # --------------------------------------------------
-    # Spawn the engine (cwd = worker_dir)
-    # --------------------------------------------------
-    pid = Process.spawn(*cmd, chdir: worker_dir, out: tmp_path, err: tmp_path)
+    status, timed_out, fail_reason, output = execute_demo_process(
+      cmd: cmd,
+      worker_dir: worker_dir,
+      exe: exe,
+      log: log
+    )
 
-    status = nil
-
-    begin
-      Timeout.timeout(TIMEOUT_SECS) do
-        Process.wait(pid)
-        status = $?
-      end
-    rescue Timeout::Error
-      timed_out = true
-      fail_reason = "timeout after #{TIMEOUT_SECS}s"
-      thread_log(log) { puts red("⏱️  Demo timed out after #{TIMEOUT_SECS}s") }
-
-      begin
-        Process.kill('TERM', pid) rescue nil
-        sleep 0.5
-        Process.kill('KILL', pid) rescue nil
-      rescue Errno::ESRCH
-      end
-    end
-
-    # --------------------------------------------------
-    # Read last 2KB of output
-    # --------------------------------------------------
-    output = ""
-    if File.exist?(tmp_path)
-      begin
-        File.open(tmp_path, "rb") do |f|
-          f.seek(-2048, IO::SEEK_END) rescue nil
-          output = f.read || ""
-        end
-      ensure
-        FileUtils.rm_f(tmp_path) rescue nil
-      end
-    end
-
-  rescue => e
-    thread_log(log) { puts "[Error executing demo-test: #{e.message}]" }
-    fail_reason = e.message
+    wait_for_file(levelstat_path) if !timed_out && status&.exitstatus == 0
   end
 
   # --------------------------------------------------
