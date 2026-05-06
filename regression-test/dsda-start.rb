@@ -53,6 +53,17 @@ def sync_failures?
   state.fetch('failed_wads', {}).any? || state.fetch('failed_demos', {}).any?
 end
 
+def test_failed?
+  if File.exist?(DSDA.test_state_path)
+    state = JSON.parse(File.read(DSDA.test_state_path))
+    return state['status'].to_s == 'fail'
+  end
+
+  count_csv_rows(FAILURES_OUTPUT).positive?
+rescue
+  count_csv_rows(FAILURES_OUTPUT).positive?
+end
+
 def format_dashboard_time(time)
   time ? time.strftime('%Y-%m-%d %I:%M %p') : 'never'
 end
@@ -65,6 +76,32 @@ rescue
   0
 end
 
+def last_test_result
+  state =
+    if File.exist?(DSDA.test_state_path)
+      JSON.parse(File.read(DSDA.test_state_path))
+    end
+
+  if state
+    scope = state['scope'].to_s
+    failed = state['failed'].to_i
+    total = state['total'].to_i
+    status = state['status'].to_s
+    suffix = scope.empty? ? '' : " (#{scope}, #{total} demos)"
+
+    return status == 'pass' ? green("pass#{suffix}") : red("fail#{suffix}, #{failed} failed")
+  end
+
+  failure_count = count_csv_rows(FAILURES_OUTPUT)
+  if failure_count.positive?
+    red("fail (#{failure_count} failure#{'s' if failure_count != 1})")
+  elsif File.exist?(CSV_OUTPUT)
+    green('pass')
+  else
+    yellow('unknown')
+  end
+end
+
 def print_dashboard
   puts
   puts
@@ -72,6 +109,7 @@ def print_dashboard
   puts "----------------------------------------"
   puts
   puts "Last sync: #{format_dashboard_time(load_last_sync)}"
+  puts "Last test result: #{last_test_result}"
   puts
   puts 'Type the program you would like to run:'
   puts '  index [options]            -   Get the current DSDA Archive demo database'
@@ -158,6 +196,14 @@ def post_run_prompts(command, args)
   if command == 'sync' && !failed_only && sync_failures?
     if prompt_yes_no('Seems the sync has failed for one or more demos. Would you like to retry syncing failed demos?')
       run_program('sync', ['--failed-only'])
+    end
+  end
+
+  if command == 'test' && !failed_only && test_failed?
+    puts
+    puts red('Seems the demo test failed. Please take a look at failures.csv, and check your port or overrides.csv.')
+    if prompt_yes_no('Would you like to re-test the failed demos?')
+      run_program('test', ['--failed-only'])
     end
   end
 end

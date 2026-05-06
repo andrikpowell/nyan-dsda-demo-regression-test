@@ -18,6 +18,10 @@ module DSDA
     File.expand_path('cache/dsda_sync_state.json', base_dir)
   end
 
+  def self.test_state_path(base_dir = __dir__ + '/..')
+    File.expand_path('cache/dsda_test_state.json', base_dir)
+  end
+
   def self.index_cache_path(base_dir = __dir__ + '/..')
     File.expand_path('cache/dsda_demo_index.json', base_dir)
   end

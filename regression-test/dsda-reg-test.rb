@@ -72,6 +72,19 @@ exe_path_override = consume_path_option!(%w[--set-exe-path])
 old_exe_path_override = consume_path_option!(%w[--set-old-exe-path])
 
 RUN_ALL_IWADS = ARGV.delete("--all") ? true : false
+FAILED_ONLY = ARGV.any? { |arg| DSDA.failed_flag?(arg) }
+TEST_SCOPE_LABEL = begin
+  query = ARGV.find { |arg| !arg.start_with?("-") }&.strip
+  if FAILED_ONLY
+    "failed-only"
+  elsif RUN_ALL_IWADS
+    "all"
+  elsif query && !query.empty?
+    query
+  else
+    "primary"
+  end
+end
 
 if exe_path_override
   Object.send(:remove_const, :EXE_PATH)
@@ -479,7 +492,6 @@ end
 # ============================================================
 # --failed-only support (non-invasive)
 # ============================================================
-FAILED_ONLY = ARGV.any? { |arg| DSDA.failed_flag?(arg) }
 ARGV.delete_if { |arg| DSDA.failed_flag?(arg) }
 
 def load_failures_list
@@ -2493,6 +2505,33 @@ puts "#{reg_summary}\n"
 
 puts "⏱️ Time elapsed: #{format_duration(duration)}\n"
 puts "⚙️ Used #{MAX_CORES} of #{TOTAL_CORES} cores\n"
+
+def write_test_state(scope:, status:, failed:, total:, passed:, duration:, regressions:)
+  FileUtils.mkdir_p(File.dirname(DSDA.test_state_path))
+  File.write(
+    DSDA.test_state_path,
+    JSON.pretty_generate({
+      "updated_at" => Time.now.utc.iso8601,
+      "scope" => scope,
+      "status" => status,
+      "failed" => failed,
+      "total" => total,
+      "passed" => passed,
+      "duration" => format_duration(duration),
+      "regressions" => regressions
+    })
+  )
+end
+
+write_test_state(
+  scope: TEST_SCOPE_LABEL,
+  status: full_pass ? "pass" : "fail",
+  failed: failed,
+  total: total,
+  passed: passed,
+  duration: duration,
+  regressions: regressions
+)
 
 # ============================================================
 # Save results to CSV
