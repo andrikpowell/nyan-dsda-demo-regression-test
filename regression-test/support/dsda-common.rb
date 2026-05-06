@@ -48,7 +48,8 @@ module DSDA
   # engines to skip
   SKIP_ENGINE_PATTERNS = [
     /gzdoom/i, /zdoom/i, /lzdoom/i, /doom\s*legacy/i,
-    /vbdoom/i, /doom64ex/i, /k8vavoom/i, /qdoom/i
+    /vbdoom/i, /doom64ex/i, /k8vavoom/i, /qdoom/i,
+    /eternity\s*engine/i
   ]
 
   JSON_MUTEX = Mutex.new
