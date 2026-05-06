@@ -30,6 +30,10 @@ opt.on("--retry-failed", "Retry only failed demos") { options[:retry_failed] = t
 opt.on("-h","--help"){ puts opt; exit }
 opt.parse!(ARGV)
 
+PRIMARY_IWADS = %w[doom2 doom plutonia tnt].freeze
+EXOTIC_IWADS  = %w[heretic hexen chex].freeze
+KNOWN_IWADS   = (PRIMARY_IWADS + EXOTIC_IWADS).freeze
+
 state = DSDA.load_state(DSDA.state_cache_path)
 
 # retry-only path
@@ -52,15 +56,85 @@ if options[:refresh_index]
   exit 1
 end
 
-# Define sync_single_wad here to keep script self-contained and single-threaded
-def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos: false)
-  puts "🔎 Fetching DSDA WAD metadata for: #{wad_slug}"
-  wad_meta = nil
+def fetch_wad_meta(wad_slug)
   begin
-    wad_meta = DSDA.http_get_json("#{DSDA::DSDA_API}/wads/#{URI.encode_www_form_component(wad_slug)}")
+    DSDA.http_get_json("#{DSDA::DSDA_API}/wads/#{URI.encode_www_form_component(wad_slug)}")
   rescue => e
     raise "Failed fetching wad metadata: #{e.message}"
   end
+end
+
+def find_wad_key(wad_map, query)
+  return nil if query.nil?
+
+  wad_map.key?(query) ? query : wad_map.keys.find { |wad| wad.casecmp?(query) }
+end
+
+def select_sync_targets(raw_query, index)
+  wad_map = index['wad_map']
+  wad_meta = index['wad_meta'] || {}
+  return wad_map.keys.map { |wad| { wad: wad } } if raw_query.nil? || raw_query.strip.empty?
+
+  parts = raw_query.split('/').map(&:strip).reject(&:empty?)
+  first = parts[0]&.downcase
+
+  if KNOWN_IWADS.include?(first)
+    iwad = first
+    wad = parts[1]
+    abort("❌ Sync selectors only support IWAD/WAD, not demo-level paths") if parts.size > 2
+
+    unless wad
+      puts "🎯 Syncing all WADs for IWAD #{iwad}"
+      missing_meta = wad_map.keys.any? { |wad_slug| !wad_meta.key?(wad_slug) }
+      if wad_meta.empty? || missing_meta
+        abort("❌ This index does not include complete IWAD metadata.\n" \
+              "Please re-run:\n" \
+              "  ruby dsda-index.rb")
+      end
+
+      total = wad_map.keys.length
+      found = 0
+
+      return wad_map.keys.each_with_index.filter_map do |wad_slug, index|
+        meta = wad_meta[wad_slug]
+        meta_iwad = (meta['iwad'] || 'doom2').to_s.downcase
+        found += 1 if meta_iwad == iwad
+
+        if ((index + 1) % 25).zero? || index + 1 == total
+          percent = ((index + 1).to_f / [total, 1].max * 100).round(1)
+          puts "🔎 Scanning WAD metadata #{index + 1}/#{total} (#{percent}%) - found #{found} #{iwad}"
+        end
+
+        meta_iwad == iwad ? { wad: wad_slug, meta: meta } : nil
+      rescue => e
+        warn "⚠️ Skipping #{wad_slug}: #{e.message}"
+        nil
+      end
+    end
+
+    wad_key = find_wad_key(wad_map, wad)
+    abort("❌ WAD '#{wad}' not found in index") unless wad_key
+
+    meta = wad_meta[wad_key] || fetch_wad_meta(wad_key)
+    meta_iwad = (meta['iwad'] || 'doom2').to_s.downcase
+    abort("❌ WAD '#{wad_key}' belongs to #{meta_iwad}, not #{iwad}") unless meta_iwad == iwad
+
+    return [{ wad: wad_key, meta: meta }]
+  end
+
+  abort("❌ Sync selectors only support WAD or IWAD/WAD, not demo-level paths") if parts.size > 1
+
+  wad = parts[0]
+  wad_key = find_wad_key(wad_map, wad)
+
+  abort("❌ WAD '#{wad}' not found in index") unless wad_key
+  [{ wad: wad_key }]
+end
+
+# Define sync_single_wad here to keep script self-contained and single-threaded
+def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos: false, wad_meta: nil)
+  puts "🔎 Fetching DSDA WAD metadata for: #{wad_slug}"
+  wad_meta ||= fetch_wad_meta(wad_slug)
 
   unless wad_meta.is_a?(Hash)
     raise "Invalid WAD metadata received for #{wad_slug}"
@@ -283,39 +357,43 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
 end
 
 # Main entry:
-if ARGV.length == 1 && !ARGV[0].strip.empty?
-  # single wad mode
-  wad_short = ARGV[0].strip
-  puts "ℹ️ Single WAD mode: #{wad_short} (force=#{!!options[:force]})"
-  sync_single_wad(wad_short, state: state, force: !!options[:force], skip_wads: options[:skip_wads], skip_demos: options[:skip_demos])
-else
-  # full sync using cached index
-  if index.nil?
-    puts "❌ No index cache to drive full sync. Run: ruby dsda-index.rb --threads 5"
-    exit 1
-  end
-
-  wad_map = index['wad_map']
-  processed = 0
-  errors = 0
-
-  wad_map.each do |wad_short, demos|
-    begin
-      puts "\n────────────────────────────────────────"
-      puts "Syncing wad: #{wad_short} (#{demos.length} demos)"
-      sync_single_wad(wad_short, state: state, force: options[:force], skip_wads: options[:skip_wads], skip_demos: options[:skip_demos])
-    rescue Interrupt
-      puts "\n✋ Interrupted by user. State saved."
-      DSDA.save_state(state, DSDA.state_cache_path)
-      exit
-    rescue => e
-      errors += 1
-      puts "⚠️  Skipping wad #{wad_short} due to error: #{e.message}"
-    end
-    processed += 1
-  end
-
-  state['last_sync'] = Time.now.utc.iso8601
-  DSDA.save_state(state, DSDA.state_cache_path)
-  puts "\n✅ FULL SYNC complete. Wads processed: #{processed}, errors: #{errors}"
+if index.nil?
+  puts "❌ No index cache to drive sync. Run: ruby dsda-index.rb --threads 5"
+  exit 1
 end
+
+raw_query = ARGV[0]&.strip
+targets =
+  select_sync_targets(raw_query, index)
+processed = 0
+errors = 0
+
+targets.each do |target|
+  wad_short = target[:wad]
+  demos = index['wad_map'][wad_short] || []
+
+  begin
+    puts "\n────────────────────────────────────────"
+    puts "Syncing wad: #{wad_short} (#{demos.length} demos)"
+    sync_single_wad(
+      wad_short,
+      state: state,
+      force: options[:force],
+      skip_wads: options[:skip_wads],
+      skip_demos: options[:skip_demos],
+      wad_meta: target[:meta]
+    )
+  rescue Interrupt
+    puts "\n✋ Interrupted by user. State saved."
+    DSDA.save_state(state, DSDA.state_cache_path)
+    exit
+  rescue => e
+    errors += 1
+    puts "⚠️  Skipping wad #{wad_short} due to error: #{e.message}"
+  end
+  processed += 1
+end
+
+state['last_sync'] = Time.now.utc.iso8601
+DSDA.save_state(state, DSDA.state_cache_path)
+puts "\n✅ FULL SYNC complete. Wads processed: #{processed}, errors: #{errors}"

@@ -367,7 +367,7 @@ module DSDA
         wad_map = data["wad_map"]
 
         if wad_map.is_a?(Hash)
-          save_index(wad_map, per: data["per"], path: path)
+          save_index(wad_map, per: data["per"], path: path, wad_meta: data["wad_meta"] || {})
           return load_index(path)
         else
           warn "⚠️ 'wad_map' missing in old JSON format"
@@ -387,6 +387,7 @@ module DSDA
         return nil unless header.is_a?(Hash) && header["indexed_at"]
 
         wad_map = Hash.new { |h,k| h[k] = [] }
+        wad_meta = {}
 
         lines[1..].each_with_index do |line, idx|
           stripped = line.strip
@@ -400,9 +401,16 @@ module DSDA
             next
           end
 
-          wad  = obj["wad"]
+          wad = obj["wad"]
+          next if wad.nil?
+
+          if obj.key?("wad_meta")
+            wad_meta[wad] = obj["wad_meta"] || {}
+            next
+          end
+
           demo = obj["demo"]
-          next if wad.nil? || demo.nil?
+          next if demo.nil?
 
           wad_map[wad] << demo
         end
@@ -410,7 +418,9 @@ module DSDA
         return {
           "indexed_at" => header["indexed_at"],
           "per"        => header["per"],
-          "wad_map"    => wad_map
+          "format"     => header["format"],
+          "wad_map"    => wad_map,
+          "wad_meta"   => wad_meta
         }
       rescue => e
         warn "⚠️ NDJSON index parse error: #{e.message}"
