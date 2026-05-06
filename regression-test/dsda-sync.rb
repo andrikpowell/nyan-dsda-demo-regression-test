@@ -350,9 +350,15 @@ def sync_single_wad(wad_slug, state:, force: false, skip_wads: false, skip_demos
           "URL"     => "https://dsdarchive.com/wads/#{short}"
         })
 
-        # Merge temp folder into the final merged folder
-        DSDA.merge_demo_dir(temp_demo_folder, merged_demo_folder)
-        puts "📝 Merged demo into #{DSDA.display_path(merged_demo_folder)}"
+        FileUtils.rm_rf(merged_demo_folder) if force && Dir.exist?(merged_demo_folder)
+
+        # Move fresh demo folders into place; merge only when the destination already exists.
+        merge_result = DSDA.merge_demo_dir(temp_demo_folder, merged_demo_folder)
+        if merge_result == :moved
+          puts "📝 Saved demo: #{DSDA.display_path(merged_demo_folder)}"
+        else
+          puts "🔀 Merged demo: #{DSDA.display_path(merged_demo_folder)}"
+        end
         puts green("✅ Demo extraction successful")
         puts
 

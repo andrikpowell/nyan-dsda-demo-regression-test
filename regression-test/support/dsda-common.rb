@@ -618,31 +618,40 @@ module DSDA
   end
 
   # Merge temporary extracted demo folder into the final merged folder.
-  # Mirrors dsda-fix.rb behavior: merge .lmp + append DSDA-info.txt blocks.
+  # Keep every extracted demo-side file, while appending DSDA-info.txt blocks.
   def self.merge_demo_dir(src, dest)
-    FileUtils.mkdir_p(dest)
+    unless Dir.exist?(dest)
+      FileUtils.mv(src, dest)
+      return :moved
+    end
 
-    # 1) merge .lmp files
-    Dir.glob(File.join(src, "*.lmp")).each do |lmp|
-      base      = File.basename(lmp)
-      dest_file = File.join(dest, base)
+    src_prefix = File.join(src, '')
 
+    Dir.glob(File.join(src, '**', '*'), File::FNM_DOTMATCH).each do |file|
+      next unless File.file?(file)
+      next if File.basename(file).casecmp?('DSDA-info.txt')
+
+      relative = file.sub(/\A#{Regexp.escape(src_prefix)}/, '')
+      dest_file = File.join(dest, relative)
+      FileUtils.mkdir_p(File.dirname(dest_file))
+
+      base = File.basename(file)
       if File.exist?(dest_file)
         # identical size → assume duplicate; skip
-        if File.size(lmp) == File.size(dest_file)
+        if File.size(file) == File.size(dest_file)
           next
         else
-          # conflict → rename incoming file
-          new_name = next_available_filename(dest, base)
-          puts "      ⚠️ Conflict: #{base} → #{new_name}"
-          FileUtils.cp(lmp, File.join(dest, new_name))
+          # conflict → rename incoming file in the same relative folder
+          new_name = next_available_filename(File.dirname(dest_file), base)
+          new_relative = File.join(File.dirname(relative), new_name)
+          puts "      ⚠️ Conflict: #{relative} → #{new_relative}"
+          FileUtils.cp(file, File.join(File.dirname(dest_file), new_name))
         end
       else
-        FileUtils.cp(lmp, dest_file)
+        FileUtils.cp(file, dest_file)
       end
     end
 
-    # 2) merge DSDA-info.txt (append block)
     src_info = File.join(src, "DSDA-info.txt")
     if File.exist?(src_info)
       dest_info = File.join(dest, "DSDA-info.txt")
@@ -654,5 +663,7 @@ module DSDA
         FileUtils.cp(src_info, dest_info)
       end
     end
+
+    :merged
   end
 end
