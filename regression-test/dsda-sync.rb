@@ -26,7 +26,7 @@ opt.on("--force", "Force overwrite extracted content") { options[:force] = true 
 opt.on("--skip-wads", "Don't download/extract wad zips") { options[:skip_wads] = true }
 opt.on("--skip-demos", "Don't download/extract demo zips") { options[:skip_demos] = true }
 opt.on("--refresh-index", "Ignore cached index and build a new one (recommended: run dsda-index.rb)") { options[:refresh_index] = true }
-opt.on("--retry-failed", "Retry only failed demos") { options[:retry_failed] = true }
+opt.on(*DSDA::FAILED_FLAGS, "Retry failed WADs and demos") { options[:retry_failed] = true }
 opt.on("-h","--help"){ puts opt; exit }
 opt.parse!(ARGV)
 

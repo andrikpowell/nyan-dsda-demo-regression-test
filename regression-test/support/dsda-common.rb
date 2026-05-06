@@ -54,6 +54,7 @@ module DSDA
 
   JSON_MUTEX = Mutex.new
   INDEX_WRITE_MUTEX = Mutex.new
+  FAILED_FLAGS = %w[--retry-failed --failed-only].freeze
 
   # ============================================================
   # Time format
@@ -117,7 +118,11 @@ module DSDA
     16 + (36 * (r / 51)) + (6 * (g / 51)) + (b / 51)
   end
 
-  module_function :format_duration, :color, :green, :yellow, :red, :orange, :rainbow, :hsv_to_rgb, :rgb_to_ansi256
+  def failed_flag?(arg)
+    FAILED_FLAGS.include?(arg.to_s.downcase)
+  end
+
+  module_function :format_duration, :color, :green, :yellow, :red, :orange, :rainbow, :hsv_to_rgb, :rgb_to_ansi256, :failed_flag?
 
   def self.json_generate_safe(obj)
     JSON_MUTEX.synchronize { JSON.generate(obj) }

@@ -479,7 +479,8 @@ end
 # ============================================================
 # --failed-only support (non-invasive)
 # ============================================================
-FAILED_ONLY = ARGV.delete("--failed-only") ? true : false
+FAILED_ONLY = ARGV.any? { |arg| DSDA.failed_flag?(arg) }
+ARGV.delete_if { |arg| DSDA.failed_flag?(arg) }
 
 def load_failures_list
   return {} unless FAILED_ONLY
