@@ -2450,9 +2450,9 @@ end
 # ------------------------------
 # Unified CSV writer
 # ------------------------------
-def write_results_csv(sorted, output)
+def write_results_csv(sorted, output, merge_failed_only: true)
   # merge failed-only results into existing CSV
-  if FAILED_ONLY && File.exist?(output)
+  if merge_failed_only && FAILED_ONLY && File.exist?(output)
     merge_failed_rows_into_results(sorted, output)
     return   # we do NOT overwrite the CSV afterward
   end
@@ -2519,7 +2519,7 @@ end
 def try_save_all_csvs(sorted, failures)
   # Base task list always includes results.csv
   tasks = [
-    { name: "results", output: CSV_OUTPUT, data: sorted }
+    { name: "results", output: CSV_OUTPUT, data: sorted, merge_failed_only: true }
   ]
 
   # Create backups before writing anything
@@ -2529,7 +2529,7 @@ def try_save_all_csvs(sorted, failures)
 
   # Only add failures.csv if there are real failures
   if failures.any?
-    tasks << { name: "failures", output: FAILURES_OUTPUT, data: failures }
+    tasks << { name: "failures", output: FAILURES_OUTPUT, data: failures, merge_failed_only: false }
   end
 
   locked = {}
@@ -2537,7 +2537,7 @@ def try_save_all_csvs(sorted, failures)
   # Step 1 — initial save attempt
   tasks.each do |t|
     begin
-      write_results_csv(t[:data], t[:output])
+      write_results_csv(t[:data], t[:output], merge_failed_only: t[:merge_failed_only])
     rescue Errno::EACCES
       locked[t[:name]] = t
     end
@@ -2606,7 +2606,7 @@ def try_save_all_csvs(sorted, failures)
       locked.keys.each do |key|
         t = locked[key]
         begin
-          write_results_csv(t[:data], t[:output])
+          write_results_csv(t[:data], t[:output], merge_failed_only: t[:merge_failed_only])
           locked.delete(key)  # success, remove from locked list
         rescue Errno::EACCES
           # still locked
@@ -2636,7 +2636,7 @@ def try_save_all_csvs(sorted, failures)
     locked.keys.each do |key|
       t = locked[key]
       begin
-        write_results_csv(t[:data], t[:output])
+        write_results_csv(t[:data], t[:output], merge_failed_only: t[:merge_failed_only])
         locked.delete(key)
       rescue Errno::EACCES
       end
@@ -2646,7 +2646,7 @@ def try_save_all_csvs(sorted, failures)
   # If still locked, write to alternate filenames
   locked.each do |key, t|
     duplicate = csv_next_numbered_filename(t[:output])
-    write_results_csv(t[:data], duplicate)
+    write_results_csv(t[:data], duplicate, merge_failed_only: t[:merge_failed_only])
     puts yellow("📁 #{t[:output]} locked → wrote #{duplicate} instead")
   end
 end
