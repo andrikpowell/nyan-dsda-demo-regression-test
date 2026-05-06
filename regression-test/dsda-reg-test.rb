@@ -1682,6 +1682,24 @@ def auto_file_override_entries(env)
   Array(entries).map(&:to_s).reject(&:empty?)
 end
 
+def auto_unsupported_info(env)
+  return nil unless defined?(AUTO_FILE_UNSUPPORTED)
+
+  key = "#{env[:iwad_name]}/#{env[:wad_name]}".downcase
+  info = AUTO_FILE_UNSUPPORTED[key]
+  return nil unless info
+
+  if info.is_a?(Hash)
+    comments = info[:comments] || info["comments"] || info[:comment] || info["comment"]
+    reason = info[:reason] || info["reason"] || "unsupported"
+  else
+    comments = Array(info).join(", ")
+    reason = "unsupported"
+  end
+
+  { reason: reason.to_s, comments: comments.to_s }
+end
+
 def resolve_override_path(entry, demo_folder_path, wad_folder_path)
   # 1. Handle all special prefixes (demo_dir/, ML/, CM/)
   WAD_OVERRIDE_PATHS.each do |prefix, resolver|
@@ -1745,6 +1763,7 @@ def prepare_demo_info(env)
   extra_args = []
   override_iwad_flag = false
   final_override_files = nil
+  auto_unsupported = auto_unsupported_info(env)
   explicit_file_override = override &&
                            override[:action] == "override" &&
                            override[:file_override] &&
@@ -1813,8 +1832,9 @@ def prepare_demo_info(env)
     override_files:     final_override_files,  # array or nil
     extra_args:         extra_args,
     override_iwad_flag: override_iwad_flag,
-    skip:               override && override[:action] == "skip",
-    reason:             override && override[:reason]
+    skip:               (override && override[:action] == "skip") || !!auto_unsupported,
+    reason:             (override && override[:reason]) || auto_unsupported&.dig(:reason),
+    auto_comments:      auto_unsupported&.dig(:comments)
   }
 end
 
@@ -1828,6 +1848,7 @@ SKIP_IMMEDIATE = [
   "unpredicatable",
   "duplicate",
   "ignore",
+  "unsupported",
   "wrong iwad",
   "wrong wad",
   "too long"
@@ -1937,6 +1958,7 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
           override_iwad   = resolved[:override_iwad_flag]
           should_skip     = resolved[:skip]
           skip_reason     = resolved[:reason]
+          auto_comments   = resolved[:auto_comments]
 
           # Placeholder for old/new engine results
           old_result  = ""
@@ -1974,7 +1996,7 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
             iwad_override: override ? override[:iwad_override] : nil,
             file_override: override ? override[:file_override] : nil,
             extra_args:    override ? override[:extra_args]    : nil,
-            comments:      override ? override[:comments]      : nil,
+            comments:      (override ? override[:comments] : nil) || auto_comments,
             demofolder:    override ? override[:demofolder]    : nil
           }
 

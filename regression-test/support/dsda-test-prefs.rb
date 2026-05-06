@@ -69,6 +69,13 @@ AUTO_FILE_OVERRIDES = {
   "doom2/junkfood4"    => ["EX/Junkfood4.wad"],
 }.freeze
 
+# Known folders whose demos are unsupported as a group.
+# The value is written to Comments; the result reason stays "unsupported".
+AUTO_FILE_UNSUPPORTED = {
+  "hexen/hexen10" => "Hexen 1.0",
+  "heretic/heretic10" => "Heretic 1.0",
+}.freeze
+
 # Amount of CPU cores to use (default: 50% of total)
 PERCENT_OF_CORES = 0.50
 
