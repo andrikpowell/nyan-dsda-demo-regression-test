@@ -168,6 +168,10 @@ module Utility
       @data = File.readlines(filename, chomp: true).map(&:split)
     end
 
+    def rows
+      @data
+    end
+
     def total
       return '00:00' unless @data.last
 

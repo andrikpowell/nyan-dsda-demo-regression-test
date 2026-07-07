@@ -47,6 +47,9 @@ def print_help
       --set-old-exe-path PATH
           Override the old/reference engine executable for this run.
 
+      --compare
+          Run the old/reference engine even when the new engine passes, then compare levelstat output.
+
       -h, --h, -help, --help
           Show this help.
   HELP
@@ -72,6 +75,7 @@ exe_path_override = consume_path_option!(%w[--set-exe-path])
 old_exe_path_override = consume_path_option!(%w[--set-old-exe-path])
 
 RUN_ALL_IWADS = ARGV.delete("--all") ? true : false
+LEVELSTAT_COMPARE = ARGV.delete("--compare") ? true : false
 FAILED_ONLY = ARGV.any? { |arg| DSDA.failed_flag?(arg) }
 TEST_SCOPE_LABEL = begin
   query = ARGV.find { |arg| !arg.start_with?("-") }&.strip
@@ -893,8 +897,15 @@ def classify_regression(new_result:, old_result:, new_reason:, old_reason:, over
   # Special case: Skip override
   # -------------------------------------
   if override_skip
-    # NEW passes, OLD wasn't run
-    if new_result == "pass" && old_result.nil?
+    # NEW passes. OLD is usually not run, but forced levelstat runs it too.
+    if new_result == "pass" && (old_result.nil? || old_result == "pass")
+      if old_result == "pass"
+        return {
+          match: "skip",
+          ui_message: "PASS 🟢 (skip override: both engines succeeded)",
+        }
+      end
+
       return {
         match: "skip",
         ui_message: "PASS 🟢 (skip override: old not run)",
@@ -1000,6 +1011,13 @@ def classify_regression(new_result:, old_result:, new_reason:, old_reason:, over
     match: "fail - unknown",
     ui_message: "FAIL 🔴 unable to get result (NEW=#{new_result.inspect}, OLD=#{old_result.inspect})",
   }
+end
+
+def levelstats_match?(new_path, old_path)
+  return nil unless new_path && old_path
+  return nil unless File.exist?(new_path) && File.exist?(old_path)
+
+  Utility::Levelstat.new(new_path).rows == Utility::Levelstat.new(old_path).rows
 end
 
 # ============================================================
@@ -2216,10 +2234,11 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
 
           # --------------------------------------------------------
           # 4. Override action = "override"
-          #    If NEW passes, we trust the override and never run OLD.
+          #    If NEW passes, trust the override unless forced levelstat
+          #    comparison needs the OLD run too.
           # --------------------------------------------------------
           if override && override[:action].to_s.strip.downcase == "override"
-            if new_result == "pass"
+            if new_result == "pass" && !LEVELSTAT_COMPARE
               local_results << build_result_row(
                 base: base_info,
                 override: override_info,
@@ -2247,9 +2266,9 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
           end
 
           # ---------------------------------------
-          # 5. NEW passed → no need to run OLD
+          # 5. NEW passed → no need to run OLD unless forced levelstat
           # ---------------------------------------
-          if new_result == "pass"
+          if new_result == "pass" && !LEVELSTAT_COMPARE
             # Save results and continue
             local_results << build_result_row(
               base: base_info,
@@ -2276,7 +2295,8 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
           end
 
           # -------------------------------------------------------------
-          # 6. NEW failed normally → run OLD to check for regressions
+          # 6. NEW failed normally, or forced levelstat was requested.
+          #    Run OLD to check for regressions.
           # -------------------------------------------------------------
           old_result, old_output, old_actual, old_reason, old_err,
             _unused_cmd, old_analysis_path, old_levelstat_path =
@@ -2327,6 +2347,26 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
             override_action: override&.dig(:action)
           )
 
+          levelstat_match = nil
+          levelstat_problem = false
+
+          if LEVELSTAT_COMPARE && new_result == "pass" && old_result == "pass"
+            levelstat_match = levelstats_match?(new_levelstat_path, old_levelstat_path)
+
+            if levelstat_match
+              log_line(log, green("LEVELSTAT PASS 🟢 new/old levelstat matched"))
+            else
+              levelstat_problem = true
+              new_reason = levelstat_match.nil? ? "levelstat comparison missing output" : "levelstat mismatch"
+              log_line(log, red("LEVELSTAT FAIL 🔴 #{new_reason}"))
+
+              info = {
+                match: "fail - regression",
+                ui_message: "FAIL 🔴 regression found (#{new_reason})",
+              }
+            end
+          end
+
           # Colorize UI message based on match classification
           match_message =
             if info[:match].start_with?("pass") ||
@@ -2345,7 +2385,7 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
           # =============================================================
           is_failure = info[:match].to_s.start_with?("fail")
 
-          if override && override[:reason] && !override[:reason].empty?
+          if !levelstat_problem && override && override[:reason] && !override[:reason].empty?
             new_reason = override[:reason]
           end
 

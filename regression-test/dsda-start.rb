@@ -192,6 +192,7 @@ end
 
 def post_run_prompts(command, args)
   failed_only = args.any? { |arg| %w[--retry-failed --failed-only].include?(arg) }
+  compare = args.any? { |arg| %w[--compare].include?(arg) }
 
   if command == 'sync' && !failed_only && sync_failures?
     if prompt_yes_no('Seems the sync has failed for one or more demos. Would you like to retry syncing failed demos?')
@@ -203,7 +204,9 @@ def post_run_prompts(command, args)
     puts
     puts red('Seems the demo test failed. Please take a look at failures.csv, and check your port or overrides.csv.')
     if prompt_yes_no('Would you like to re-test the failed demos?')
-      run_program('test', ['--failed-only'])
+      retry_args = ['--failed-only']
+      retry_args << '--compare' if compare
+      run_program('test', retry_args)
     end
   end
 end
