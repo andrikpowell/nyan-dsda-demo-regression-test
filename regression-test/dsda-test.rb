@@ -1618,12 +1618,14 @@ puts "⚙️ Parallel mode: detected #{TOTAL_CORES} cores, using #{MAX_CORES} th
 # Progress tracking setup
 $total_sets = demo_folders.size
 $completed_sets = 0
+$total_wads = wad_groups.size
+$completed_wads = 0
 
 $last_progress_time = Time.now
 $progress_mutex = Mutex.new
 global_start_time = Time.now
 
-puts "📊 Tracking progress per demo folder (#{$total_sets} total sets)"
+puts "📊 Tracking progress per demo folder (#{$total_sets} total sets across #{$total_wads} WADs)"
 
 # ============================================================
 # Begin actual demo test
@@ -1648,10 +1650,11 @@ Thread.new do
       elapsed = format_duration(Time.now - global_start_time)
       current_time = Time.now.strftime("%I:%M %p")
       sets_left   = $total_sets - $completed_sets
+      wads_left   = $total_wads - $completed_wads
 
       $print_mutex.synchronize do
         # puts orange("💤 Still working... #{$completed_sets} / #{$total_sets} demo folders (#{percent_str}%) [#{current_time}] - #{elapsed} elapsed")
-        puts orange("💤 Still working... #{sets_left} demo folders left (#{percent_str}%) [#{current_time}] - #{elapsed} elapsed")
+        puts orange("💤 Still working... #{sets_left} demo folders, #{wads_left} WADs left (#{percent_str}%) [#{current_time}] - #{elapsed} elapsed")
       end
     end
   end
@@ -2445,18 +2448,21 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
       puts colorize.call("----------------------------------------------------------------------\n")
     end
 
-    # increment completed-sets by *all* demo folders in this WAD
+    # Mark this WAD complete and print an updated progress snapshot.
     $progress_mutex.synchronize do
+      $completed_wads += 1
+
       if Time.now - $last_progress_time >= 5 && $completed_sets < $total_sets
         $last_progress_time = Time.now
         elapsed     = format_duration(Time.now - global_start_time)
         percent     = ($completed_sets.to_f / [$total_sets, 1].max * 100)
         percent_str = percent.to_i == percent ? percent.to_i.to_s : percent.round(1).to_s
         sets_left   = $total_sets - $completed_sets
+        wads_left   = $total_wads - $completed_wads
 
         $print_mutex.synchronize do
           # puts orange("🟠 Progress: #{$completed_sets} / #{$total_sets} demo folders (#{percent_str}%) - #{elapsed} elapsed")
-          puts orange("🟠 Progress: #{sets_left} demo folders left (#{percent_str}%) - #{elapsed} elapsed")
+          puts orange("🟠 Progress: #{sets_left} demo folders, #{wads_left} WADs left (#{percent_str}%) - #{elapsed} elapsed")
           puts orange("----------------------------------------------------------------------\n")
         end
       end
@@ -2473,7 +2479,7 @@ end
 percent = ($completed_sets.to_f / [$total_sets, 1].max * 100)
 percent_str = percent.to_i == percent ? percent.to_i.to_s : percent.round(1).to_s
 
-puts green("🟢 Finished: #{$completed_sets} / #{$total_sets} demo folders (#{percent_str}%)")
+puts green("🟢 Finished: #{$completed_sets} / #{$total_sets} demo folders, #{$completed_wads} / #{$total_wads} WADs (#{percent_str}%)")
 puts green("----------------------------------------------------------------------\n")
 
 # ============================================================
