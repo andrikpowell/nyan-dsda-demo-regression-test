@@ -50,6 +50,10 @@ def print_help
       --compare
           Run the old/reference engine even when the new engine passes, then compare levelstat output.
 
+      --complevel NUMBER, --cl NUMBER
+          Run only demos whose DSDA-info.txt Port (or legacy Engine) value ends in cl#.
+          For example, --complevel 2 and --cl 2 match cl2 but not cl21.
+
       -h, --h, -help, --help
           Show this help.
   HELP
@@ -71,12 +75,29 @@ def consume_path_option!(names)
   File.expand_path(value)
 end
 
+def consume_value_option!(names)
+  index = ARGV.index { |arg| names.include?(arg) }
+  return nil unless index
+
+  value = ARGV[index + 1]
+  abort("❌ Missing value for #{ARGV[index]}") if value.nil? || value.start_with?("--")
+
+  ARGV.slice!(index, 2)
+  value
+end
+
 exe_path_override = consume_path_option!(%w[--set-exe-path])
 old_exe_path_override = consume_path_option!(%w[--set-old-exe-path])
+complevel_filter_value = consume_value_option!(%w[--complevel --cl])
+
+if complevel_filter_value && complevel_filter_value !~ /\A\d+\z/
+  abort("❌ Invalid complevel: #{complevel_filter_value.inspect} (expected a number)")
+end
 
 RUN_ALL_IWADS = ARGV.delete("--all") ? true : false
 LEVELSTAT_COMPARE = ARGV.delete("--compare") ? true : false
 FAILED_ONLY = ARGV.any? { |arg| DSDA.failed_flag?(arg) }
+COMPLEVEL_FILTER = complevel_filter_value&.to_i
 TEST_SCOPE_LABEL = begin
   query = ARGV.find { |arg| !arg.start_with?("-") }&.strip
   if FAILED_ONLY
@@ -304,6 +325,26 @@ def extract_expected_times(demo_folder_path)
   end
 
   times.uniq
+end
+
+def dsda_info_complevel(demo_folder_path)
+  info_path = find_child_ci(demo_folder_path, "DSDA-info.txt")
+  return nil unless info_path && File.file?(info_path)
+
+  fields = {}
+  File.foreach(info_path, encoding: 'bom|utf-8') do |line|
+    next unless line =~ /^\s*(Port|Engine)\s*:\s*(.*?)\s*$/i
+
+    fields[$1.downcase] = $2
+  end
+
+  # Current metadata calls field "Port", but older downloaded metadata says "Engine"
+  # So test both
+  value = fields['port'] || fields['engine']
+  match = value&.match(/cl(\d+)\s*\z/i)
+  match && match[1].to_i
+rescue SystemCallError, EncodingError
+  nil
 end
 
 def sanitize_cmdline(cmd)
@@ -1228,7 +1269,12 @@ def run_demo_with_exe(
 
   if !timed_out && status&.exitstatus == 0 && !wait_for_file(levelstat_path)
     thread_log(log) do
-      puts yellow("⚠️  levelstat.txt missing after clean exit; retrying once to avoid a false positive")
+      retry_reason = if LEVELSTAT_COMPARE
+                       "before comparing levelstat output"
+                     else
+                       "to confirm the demo result"
+                     end
+      puts yellow("⚠️  levelstat.txt missing after clean exit. Retrying once #{retry_reason}")
     end
 
     FileUtils.rm_f(analysis_path)
@@ -1584,6 +1630,30 @@ if FAILED_ONLY
 
   demo_folders.uniq!
   puts "🔍 Found #{demo_folders.size} demo folders containing failed demos"
+end
+
+if COMPLEVEL_FILTER
+  before_filter = demo_folders.size
+  matched_folders = []
+  last_index_status = Time.now
+
+  puts "🔎 Indexing complevel metadata for #{before_filter} demo folders..."
+
+  demo_folders.each_with_index do |folder, index|
+    matched_folders << folder if dsda_info_complevel(folder) == COMPLEVEL_FILTER
+
+    scanned = index + 1
+    now = Time.now
+    next unless scanned == before_filter || now - last_index_status >= 2
+
+    percent = before_filter.zero? ? 100.0 : (scanned.to_f / before_filter * 100)
+    puts "   📚 Indexed #{scanned} / #{before_filter} folders (#{format('%.1f', percent)}%) — #{matched_folders.size} matched cl#{COMPLEVEL_FILTER}"
+    last_index_status = now
+  end
+
+  demo_folders = matched_folders
+  excluded = before_filter - demo_folders.size
+  puts "🎯 Complevel filter cl#{COMPLEVEL_FILTER}: selected #{demo_folders.size} demo folders (excluded #{excluded})"
 end
 
 # ============================================================
