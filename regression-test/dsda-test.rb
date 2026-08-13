@@ -2069,9 +2069,12 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
 
       # Process EACH .lmp in the folder
       demo_lmps.each do |lmp_path|
-        begin
-          demo_name = File.basename(lmp_path)
+        demo_name = File.basename(lmp_path)
+        env = nil
+        base_info = nil
+        override_info = nil
 
+        begin
           # Step 1: Gather raw info
           env = setup_demo_info(demo_folder_path, lmp_path)
 
@@ -2490,6 +2493,46 @@ Parallel.each(wad_groups.keys, in_threads: MAX_CORES) do |(iwad, wadname)|
           folder_failed = true
           log_line(log, red("❌ Error in #{iwad}/#{wadname}/#{demo_name}: #{e.class} - #{e.message}"))
           log_line(log, e.backtrace.first(5).join("\n")) if ENV['DEBUG_ERRORS']
+
+          failure_base = base_info || {
+            iwadfolder:      env ? env[:iwad_name] : iwad,
+            wadfoldername:   env ? env[:wad_name] : wadname,
+            demo_foldername: File.basename(demo_folder_path),
+            iwad:            env ? env[:iwad_file] : "#{iwad}.wad",
+            wadfolder:       env ? env[:wad_name] : wadname,
+            wad:             env && env[:primary_wad] ? File.basename(env[:primary_wad]) : nil,
+            deh:             env ? normalize_demo_relative_paths(env[:default_dehs], lmp_path).join(", ") : nil,
+            demofile:        safe_str(demo_name)
+          }
+
+          failure_override = override_info || begin
+            failed_override = env && env[:override]
+            {
+              iwad_override: failed_override&.dig(:iwad_override),
+              file_override: failed_override&.dig(:file_override),
+              extra_args:    failed_override&.dig(:extra_args),
+              comments:      failed_override&.dig(:comments),
+              demofolder:    failed_override&.dig(:demofolder)
+            }
+          end
+
+          local_results << build_result_row(
+            base: failure_base,
+            override: failure_override,
+            runtime: {
+              expected: nil,
+              new_actual: nil,
+              new_result: "fail",
+              old_actual: nil,
+              old_result: nil,
+              match: "fail - setup error",
+              action: nil,
+              reason: "demo test could not be started",
+              error: "#{e.class}: #{e.message}",
+              cmdline: nil,
+              folderpath: demo_folder_path
+            }
+          )
         end
       end
       $completed_sets += 1
